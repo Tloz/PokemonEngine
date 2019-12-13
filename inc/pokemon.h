@@ -1,3 +1,6 @@
+#ifndef POKEMON_H_
+#define POKEMON_H_
+
 #include <iostream>
 #include <string>
 // #include "ability.h"
@@ -67,3 +70,5 @@ public:
 
 
 }
+
+#endif  /* !POKEMON_H_ */
