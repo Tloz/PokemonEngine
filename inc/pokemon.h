@@ -18,7 +18,7 @@ private:
     string m_name; // specieName or nickname
     int m_gender; // 0 = none, 1 = male, 2 = female
 
-    Type* m_type; // Max 2
+    Type m_type[2];
 
     int m_level; // [0 -> 100]
     int m_px;
@@ -30,12 +30,12 @@ private:
     std::string m_DOName;
     int m_DOSecretID;
 
-    int m_currentLP; // Max = m_stats[0];
+    int m_currentLP; // [0 -> m_stats[0]]
     int m_stats[6]; // HP, Atk, Def, SpeAtk, SpeDef, Speed
     int m_IV[6];    // HP, Atk, Def, SpeAtk, SpeDef, Speed : [0 -> 31]
     int m_EV[6];    // HP, Atk, Def, SpeAtk, SpeDef, Speed : Max per stat: 252 // Global Max: 510
     
-    Move* m_moves; // Max 4
+    Move m_moves[4]; // Max 4
     // MoveTable
 
 
@@ -68,7 +68,49 @@ private:
 
 public:
 
+    int specieID();
+    string name(); // specieName or nickname
+    void name(string newName);
+    int gender(); // 0 = none, 1 = male, 2 = female
+    void gender(int newGender);
 
+    Type[2] type(); // Max 2
+
+    int level(); // [0 -> 100]
+    void setLevel(int newLevel);
+    void addLevel(int ammount);
+    void removeLevel(int ammount);
+    int px();
+    void setPX(int newAmmount);
+    void addPX(int ammount);
+    void removePX(int ammount);
+
+    int personalityValue(); // From 0 to 4 294 967 295
+    int DOID();
+    string m_DOName();
+    int DOSecretID();
+
+    int LP(); // [0 -> m_stats[0]]
+    void setLP(int ammount);
+    void addLP(int ammount);
+    void removeLP(int ammount);
+    int[6] stats();
+    int atk();
+    int def();
+    int speAtk();
+    int speDef();
+    int speed();
+    int[6] IV();
+    int IV(int index);
+    void setIV(int index, int newAmmount);
+    void addIV(int index, int ammount);
+    void removeIV(int index, int ammount);
+    int[6] EV();
+    void setEV(int index, int newAmmount);
+    void addEV(int index, int ammount);
+    void removeEV(int index, int ammount);
+    
+    Move[4] moves(); // Max 4
 }
 
 #endif  /* !POKEMON_H_ */
