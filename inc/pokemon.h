@@ -44,7 +44,9 @@ private:
     string m_DOName;
     int m_DOSecretID;
 
-    int m_currentLP; 
+    int m_currentLP;
+    /* TODO: this must be a const int. For now, will remain int for debug puposes */
+    int m_baseStats[6]; // HPMax, Atk, Def, SpeAtk, SpeDef, Speed
     int m_stats[6]; // HPMax, Atk, Def, SpeAtk, SpeDef, Speed
     int m_IV[6];    // HP, Atk, Def, SpeAtk, SpeDef, Speed : [0 -> 31]
     int m_EV[6];    // HP, Atk, Def, SpeAtk, SpeDef, Speed : Max per stat: 252 // Global Max: 510
@@ -152,6 +154,22 @@ public:
     int DOID();
     string DOName();
     int DOSecretID();
+
+    int* baseStats();
+    int baseStats(int index);
+    void baseStats(int index, int ammount);
+    int baseLP();
+    void baseLP(int ammount);
+    int baseAtk();
+    void baseAtk(int ammount);
+    int baseDef();
+    void baseDef(int ammount);
+    int baseSpeAtk();
+    void baseSpeAtk(int ammount);
+    int baseSpeDef();
+    void baseSpeDef(int ammount);
+    int baseSpeed();
+    void baseSpeed(int ammount);
 
     int LP(); // [0 -> m_stats[0]]
     int maxLP();

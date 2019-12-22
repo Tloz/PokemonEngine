@@ -144,6 +144,98 @@ int Pokemon::DOSecretID()
     return m_DOSecretID;
 }
 
+int* Pokemon::baseStats()
+{
+    return m_baseStats;
+}
+
+int Pokemon::baseStats(int index)
+{
+    return m_baseStats[index];
+}
+
+void Pokemon::baseStats(int index, int ammount)
+{
+    if((index < 0) || (index > 5))
+        throw exception();
+    if(ammount < 0)
+        ammount = 0;
+    m_baseStats[index] = ammount;
+}
+
+int Pokemon::baseLP()
+{
+    return m_baseStats[0];
+}
+
+void Pokemon::baseLP(int ammount)
+{
+    if(ammount < 0)
+        ammount = 0;
+    m_baseStats[0] = ammount;
+}
+
+int Pokemon::baseAtk()
+{
+    return m_baseStats[1];
+}
+
+void Pokemon::baseAtk(int ammount)
+{
+    if(ammount < 0)
+        ammount = 0;
+    m_baseStats[1] = ammount;
+}
+
+int Pokemon::baseDef()
+{
+    return m_baseStats[2];
+}
+
+void Pokemon::baseDef(int ammount)
+{
+    if(ammount < 0)
+        ammount = 0;
+    m_baseStats[2] = ammount;
+}
+
+int Pokemon::baseSpeAtk()
+{
+    return m_baseStats[3];
+}
+
+void Pokemon::baseSpeAtk(int ammount)
+{
+    if(ammount < 0)
+        ammount = 0;
+    m_baseStats[3] = ammount;
+}
+
+int Pokemon::baseSpeDef()
+{
+    return m_baseStats[4];
+}
+
+void Pokemon::baseSpeDef(int ammount)
+{
+    if(ammount < 0)
+        ammount = 0;
+    m_baseStats[4] = ammount;
+}
+
+int Pokemon::baseSpeed()
+{
+    return m_baseStats[5];
+}
+
+void Pokemon::baseSpeed(int ammount)
+{
+    if(ammount < 0)
+        ammount = 0;
+    m_baseStats[5] = ammount;
+}
+
+
 
 int Pokemon::LP()
 {
