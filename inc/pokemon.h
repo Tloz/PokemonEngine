@@ -31,9 +31,10 @@ private:
     string m_name; // specieName or nickname
     Gender m_gender; // 0 = none, 1 = male, 2 = female
 
-    // Type m_type[2];
+    // /!\ Un pokémon a normalement toujours un type, mais il peut avrriver qu'un pokémon perd son/ses type(s) et se retrouve sans type
+    int m_type[2];
 
-    int m_level; // [0 -> 100]
+    int m_level; // [1 -> 100]
     int m_px;
     // GrowthRate m_growthRate;
     // EvolutionLine m_line;
@@ -52,6 +53,7 @@ private:
     Move m_moves[4]; // Max 4
     */
     // MoveTable
+    // State (paralysed, asleep, poisoned, ...)
 
 
     /* Gen II
@@ -59,6 +61,7 @@ private:
     int m_happiness;
     int m_affection;
     Object m_heldItem;
+    POKERUS (date of infection, contagious, has it?)
     */
 
 
@@ -122,7 +125,7 @@ public:
 
     /*
     in: nothing
-    retval: a Type pointer
+    retval: a int pointer
     error: no types are set (min 1) or more than two are set
     */
     //Type* type(); // Max 2

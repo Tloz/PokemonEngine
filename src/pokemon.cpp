@@ -58,9 +58,13 @@ void Pokemon::gender(Gender newGender)
 
 int Pokemon::level()
 {
-    
+    if(m_level < 0)
+        m_level = 0;
+    else if(m_level > 100)
+        m_level = 100;
+    return m_level;
 }
- // [1-> 100]
+
 void Pokemon::setLevel(int newLevel)
 {
     if(newLevel <= LEVEL_MIN)
