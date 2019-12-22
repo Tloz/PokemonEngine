@@ -438,44 +438,58 @@ void Pokemon::removeEV(int index, int ammount)
 
 void Pokemon::computeMaxLP()
 {
-    float retval = 2.0;
-    retval *= m_baseStats[0];
-    retval += m_IV[0];
-    retval += floor(m_EV[0] / 4.0);
-    retval *= m_level;
-    retval = floor(retval / 100.0);
-    retval += m_level;
-    retval += 10;
+    computeStat(0);
 }
 
 void Pokemon::computeAtk()
 {
-
+    computeStat(1);
 }
 
 void Pokemon::computeDef()
 {
-
+    computeStat(2);
 }
 
 void Pokemon::computeSpeAtk()
 {
-
+    computeStat(3);
 }
 
 void Pokemon::computeSpeDef()
 {
-
+    computeStat(4);
 }
 
 void Pokemon::computeSpeed()
 {
-
+    computeStat(5);
 }
 
 void Pokemon::computeStat(int index)
 {
+    if((index < 0) || (index > 5))
+        throw exception();
+    float val = 2.0;
+    val *= m_baseStats[index];
+    val += m_IV[index];
+    val += floor(m_EV[index] / 4.0);
+    val *= m_level;
+    val = floor(retval / 100.0);
+    if(index == 0)
+    {
+        val += m_level;
+        val += 10;
+    }
+    else
+    {
+        val += 5;
+        /* TODO: When nature is implemented
+        val *= natureModifier();
+        */
+    }
 
+    m_stats[index] = int(val);
 }
 
 
