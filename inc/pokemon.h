@@ -155,9 +155,10 @@ public:
     string DOName();
     int DOSecretID();
 
+    // [1 -> 255]
     int* baseStats();
     int baseStats(int index);
-    void baseStats(int index, int ammount);
+    void baseStat(int index, int ammount);
     int baseLP();
     void baseLP(int ammount);
     int baseAtk();
@@ -193,6 +194,15 @@ public:
     void setEV(int index, int newAmmount);
     void addEV(int index, int ammount);
     void removeEV(int index, int ammount);
+
+    void computeMaxLP();
+    void computeAtk();
+    void computeDef();
+    void computeSpeAtk();
+    void computeSpeDef();
+    void computeSpeed();
+    void computeStat(int index);
+
     
     /* TODO: remove comment
     Move* moves(); // Max 4

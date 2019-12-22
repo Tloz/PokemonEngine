@@ -1,3 +1,4 @@
+#include <math.h>
 #include "../inc/pokemon.h"
 
 Pokemon::Pokemon()
@@ -146,93 +147,94 @@ int Pokemon::DOSecretID()
 
 int* Pokemon::baseStats()
 {
+    for (int i = 0; i <= 5; ++i)
+    {
+        if(m_baseStats[i] < 1)
+            m_baseStats[i] = 1;
+        else if(m_baseStats[i] > 255)
+            m_baseStats[i] = 255;
+    }
     return m_baseStats;
 }
 
 int Pokemon::baseStats(int index)
 {
+    if(ammount < 1)
+        return 1;
+    else if(ammount > 255)
+        return 255;
     return m_baseStats[index];
 }
 
-void Pokemon::baseStats(int index, int ammount)
+void Pokemon::baseStat(int index, int ammount)
 {
     if((index < 0) || (index > 5))
         throw exception();
-    if(ammount < 0)
-        ammount = 0;
+    if(ammount < 1)
+        ammount = 1;
+    else if(ammount > 255)
+        ammount = 255;
     m_baseStats[index] = ammount;
 }
 
 int Pokemon::baseLP()
 {
-    return m_baseStats[0];
+    return baseStat(0);
 }
 
 void Pokemon::baseLP(int ammount)
 {
-    if(ammount < 0)
-        ammount = 0;
-    m_baseStats[0] = ammount;
+    baseStat(0, ammount);
 }
 
 int Pokemon::baseAtk()
 {
-    return m_baseStats[1];
+    return baseStat(1);
 }
 
 void Pokemon::baseAtk(int ammount)
 {
-    if(ammount < 0)
-        ammount = 0;
-    m_baseStats[1] = ammount;
+    baseStat(1, ammount);
 }
 
 int Pokemon::baseDef()
 {
-    return m_baseStats[2];
+    return baseStat(2);
 }
 
 void Pokemon::baseDef(int ammount)
 {
-    if(ammount < 0)
-        ammount = 0;
-    m_baseStats[2] = ammount;
+    baseStat(2, ammount);
 }
 
 int Pokemon::baseSpeAtk()
 {
-    return m_baseStats[3];
+    return baseStat(3);
 }
 
 void Pokemon::baseSpeAtk(int ammount)
 {
-    if(ammount < 0)
-        ammount = 0;
-    m_baseStats[3] = ammount;
+    baseStat(3, ammount);
 }
 
 int Pokemon::baseSpeDef()
 {
-    return m_baseStats[4];
+    return baseStat(4);
 }
 
 void Pokemon::baseSpeDef(int ammount)
 {
-    if(ammount < 0)
-        ammount = 0;
-    m_baseStats[4] = ammount;
+    baseStat(4, ammount);
 }
 
 int Pokemon::baseSpeed()
 {
-    return m_baseStats[5];
+    return baseStat(5);
 }
 
 void Pokemon::baseSpeed(int ammount)
 {
-    if(ammount < 0)
-        ammount = 0;
-    m_baseStats[5] = ammount;
+    baseStat(5, ammount);
 }
 
 
@@ -432,6 +434,48 @@ void Pokemon::removeEV(int index, int ammount)
         m_EV[index] = 0;
     else
         m_EV[index] -= ammount;
+}
+
+void Pokemon::computeMaxLP()
+{
+    float retval = 2.0;
+    retval *= m_baseStats[0];
+    retval += m_IV[0];
+    retval += floor(m_EV[0] / 4.0);
+    retval *= m_level;
+    retval = floor(retval / 100.0);
+    retval += m_level;
+    retval += 10;
+}
+
+void Pokemon::computeAtk()
+{
+
+}
+
+void Pokemon::computeDef()
+{
+
+}
+
+void Pokemon::computeSpeAtk()
+{
+
+}
+
+void Pokemon::computeSpeDef()
+{
+
+}
+
+void Pokemon::computeSpeed()
+{
+
+}
+
+void Pokemon::computeStat(int index)
+{
+
 }
 
 
