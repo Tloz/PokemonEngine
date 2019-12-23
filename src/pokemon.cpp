@@ -3,13 +3,45 @@
 
 Pokemon::Pokemon()
 {
+    // Implementation de Pikachu
+    m_specieID = 25;
+    m_name = "Pikachu";
+    m_gender = Gender::Male;
+    m_level = 10;
+    // m_type = new int[2];
+    // m_type[0] = 4;
+    // m_type[1] = 0;
+    m_px = 500;
 
+    m_baseStats = new int[6];
+    m_baseStats[0] = 35;
+    m_baseStats[1] = 55;
+    m_baseStats[2] = 40;
+    m_baseStats[3] = 50;
+    m_baseStats[4] = 50;
+    m_baseStats[5] = 90;
+
+    m_IV = new int[6];
+    m_EV = new int[6];
+    m_stats = new int[6];
+    for (int i = 0; i < 6; ++i)
+    {
+        m_IV[i] = 0;
+        m_EV[i] = 0;
+        m_stats[i] = 0;
+    }
+    computeStats();
+
+
+    m_personalityValue = 3456363;
+    m_DOID = 65345;
+    m_DOName = "Emeric";
+    m_DOSecretID = 4152;
+
+    m_currentLP = 68;
 }
 
-int Pokemon::specieID()
-{
-    return m_specieID;
-}
+
 
 string Pokemon::name()
 {
@@ -17,7 +49,8 @@ string Pokemon::name()
         throw EmptyNameException();
     return m_name;
 }
- // specieName or nickname
+
+// specieName or nickname
 void Pokemon::name(string newName)
 {
     if(newName.size() == 0)
@@ -27,7 +60,7 @@ void Pokemon::name(string newName)
 
 Gender Pokemon::gender()
 {
-    if((m_gender < Gender::None) || (m_gender > Gender::Female) )
+    if((m_gender != Gender::None) && (m_gender != Gender::Female) && (m_gender != Gender::Male) )
         throw UnknownGenderException();
     return m_gender;
 }
@@ -59,10 +92,10 @@ void Pokemon::gender(Gender newGender)
 
 int Pokemon::level()
 {
-    if(m_level < 0)
-        m_level = 0;
-    else if(m_level > 100)
-        m_level = 100;
+    if(m_level < LEVEL_MIN)
+        m_level = LEVEL_MIN;
+    else if(m_level > LEVEL_MAX)
+        m_level = LEVEL_MAX;
     return m_level;
 }
 
@@ -74,20 +107,21 @@ void Pokemon::setLevel(int newLevel)
         m_level = LEVEL_MAX;
     else
         m_level = newLevel;
+    computeStats();
 }
 
 void Pokemon::addLevel(int ammount)
 {
     // Make sure  we ADD levels, must be positive
-    if(ammount <0)
+    if(ammount < 0)
         ammount = -ammount;
-
     // Don't add too much level
     int threshold = LEVEL_MAX - m_level;
     if (ammount > threshold)
         m_level += threshold;
     else
         m_level += ammount;
+    computeStats();
 }
 
 void Pokemon::removeLevel(int ammount)
@@ -95,12 +129,12 @@ void Pokemon::removeLevel(int ammount)
     // Make sure we REMOVE levels, must be positive
     if(ammount < 0)
         ammount = -ammount;
-
     // Don't remove too much level
     if((m_level - ammount) < LEVEL_MIN)
         m_level = LEVEL_MIN;
     else
         m_level -= ammount;
+    computeStats();
 }
 /*
 int Pokemon::px()
@@ -145,107 +179,12 @@ int Pokemon::DOSecretID()
     return m_DOSecretID;
 }
 
-int* Pokemon::baseStats()
-{
-    for (int i = 0; i <= 5; ++i)
-    {
-        if(m_baseStats[i] < 1)
-            m_baseStats[i] = 1;
-        else if(m_baseStats[i] > 255)
-            m_baseStats[i] = 255;
-    }
-    return m_baseStats;
-}
-
-int Pokemon::baseStats(int index)
-{
-    if(ammount < 1)
-        return 1;
-    else if(ammount > 255)
-        return 255;
-    return m_baseStats[index];
-}
-
-void Pokemon::baseStat(int index, int ammount)
-{
-    if((index < 0) || (index > 5))
-        throw exception();
-    if(ammount < 1)
-        ammount = 1;
-    else if(ammount > 255)
-        ammount = 255;
-    m_baseStats[index] = ammount;
-}
-
-int Pokemon::baseLP()
-{
-    return baseStat(0);
-}
-
-void Pokemon::baseLP(int ammount)
-{
-    baseStat(0, ammount);
-}
-
-int Pokemon::baseAtk()
-{
-    return baseStat(1);
-}
-
-void Pokemon::baseAtk(int ammount)
-{
-    baseStat(1, ammount);
-}
-
-int Pokemon::baseDef()
-{
-    return baseStat(2);
-}
-
-void Pokemon::baseDef(int ammount)
-{
-    baseStat(2, ammount);
-}
-
-int Pokemon::baseSpeAtk()
-{
-    return baseStat(3);
-}
-
-void Pokemon::baseSpeAtk(int ammount)
-{
-    baseStat(3, ammount);
-}
-
-int Pokemon::baseSpeDef()
-{
-    return baseStat(4);
-}
-
-void Pokemon::baseSpeDef(int ammount)
-{
-    baseStat(4, ammount);
-}
-
-int Pokemon::baseSpeed()
-{
-    return baseStat(5);
-}
-
-void Pokemon::baseSpeed(int ammount)
-{
-    baseStat(5, ammount);
-}
-
-
-
 int Pokemon::LP()
 {
     if(m_currentLP < 0)
         m_currentLP = 0;
     if(m_currentLP > m_stats[0])
         m_currentLP = m_stats[0];
-
     return m_currentLP;
 }
  // [0 -> m_stats[0]]
@@ -330,6 +269,7 @@ int Pokemon::IV(int index)
     return m_IV[index];
 }
 
+
 void Pokemon::setIV(int index, int newAmmount)
 {
     if((index < 0) || (index > 5))
@@ -337,6 +277,7 @@ void Pokemon::setIV(int index, int newAmmount)
     if(newAmmount > IV_MAX)
         throw exception();
     m_IV[index] = newAmmount;
+    computeStat(index);
 }
 
 void Pokemon::addIV(int index, int ammount)
@@ -349,20 +290,21 @@ void Pokemon::addIV(int index, int ammount)
     if(ammount > threshold)
         ammount = threshold;
     m_IV[index] += ammount;
+    computeStat(index);
 }
 
 void Pokemon::removeIV(int index, int ammount)
 {
     if(ammount < 0)
         ammount = -ammount;
-    if((index < 0) || (index
-     > 5))
+    if((index < 0) || (index > 5))
         throw exception();
     
     if((m_IV[index] - ammount) < IV_MIN)
         m_IV[index] = IV_MIN;
     else
         m_IV[index] -= ammount;
+    computeStat(index);
 }
 
 int* Pokemon::EV()
@@ -392,48 +334,42 @@ void Pokemon::setEV(int index, int newAmmount)
     
     if((index < 0) || (index > 5))
         throw exception();
-
     if (newAmmount < 0)
         newAmmount = -newAmmount;
-
     if (newAmmount > EV_MAX_LOCAL)
         newAmmount = EV_MAX_LOCAL;
-
     if((totalEV() + newAmmount) > EV_MAX_GLOBAL)
         newAmmount = EV_MAX_GLOBAL - totalEV();
-
     m_EV[index] = newAmmount;
+    computeStat(index);
 }
 
 void Pokemon::addEV(int index, int ammount)
 {
     if((index < 0) || (index > 5))
         throw exception();
-
     if (ammount < 0)
         ammount = -ammount;
-
     int t1 = EV_MAX_LOCAL - m_EV[index];
     int t2 = EV_MAX_GLOBAL - m_EV[index];
     int threshold = min(t1, t2);
     if(ammount > threshold)
         ammount = threshold;
-
     m_EV[index] += ammount;
+    computeStat(index);
 }
 
 void Pokemon::removeEV(int index, int ammount)
 {
     if((index < 0) || (index > 5))
         throw exception();
-
     if (ammount < 0)
         ammount = -ammount;
-
     if(ammount >= m_EV[index])
         m_EV[index] = 0;
     else
         m_EV[index] -= ammount;
+    computeStat(index);
 }
 
 void Pokemon::computeMaxLP()
@@ -475,7 +411,7 @@ void Pokemon::computeStat(int index)
     val += m_IV[index];
     val += floor(m_EV[index] / 4.0);
     val *= m_level;
-    val = floor(retval / 100.0);
+    val = floor(val / 100.0);
     if(index == 0)
     {
         val += m_level;
@@ -485,11 +421,19 @@ void Pokemon::computeStat(int index)
     {
         val += 5;
         /* TODO: When nature is implemented
-        val *= natureModifier();
+        val *= natureModifier(index);
         */
     }
 
     m_stats[index] = int(val);
+}
+
+void Pokemon::computeStats()
+{
+    for (int i = 0; i < 6; ++i)
+    {
+        computeStat(i);
+    }
 }
 
 
@@ -500,4 +444,9 @@ Move* Pokemon::moves()
 string Pokemon::toString()
 {
     return "";
+}
+
+Pokemon::~Pokemon()
+{
+
 }

@@ -1,11 +1,12 @@
 #ifndef POKEMON_H_
 #define POKEMON_H_
-#include "pkmnexceptions.h"
-// #include "ability.h"
-#include "move.h"
-// #include "object.h"
+
+#include "gender.h"
 #include "specie.h"
 #include "type.h"
+#include "move.h"
+// #include "object.h"
+// #include "ability.h"
 
 #define LEVEL_MIN 1
 #define LEVEL_MAX 100
@@ -15,47 +16,35 @@
 #define EV_MAX_LOCAL 252
 #define EV_MAX_GLOBAL 512
 
-enum class Gender
-{
-    None,
-    Male,
-    Female
-};
-
 using namespace std;
 
-class Pokemon
+class Pokemon : public Specie
 {
 private:
-    int m_specieID;
     string m_name; // specieName or nickname
     Gender m_gender; // 0 = none, 1 = male, 2 = female
-
-    // /!\ Un pokémon a normalement toujours un type, mais il peut avrriver qu'un pokémon perd son/ses type(s) et se retrouve sans type
-    int m_type[2];
-
-    int m_level; // [1 -> 100]
-    int m_px;
-    // GrowthRate m_growthRate;
-    // EvolutionLine m_line;
-
     int m_personalityValue; // From 0 to 4 294 967 295
+
     int m_DOID;
     string m_DOName;
     int m_DOSecretID;
+    
+    int m_metLevel;
+    // date m_metDate;
+    string m_metPlace;
 
+    int m_level; // [1 -> 100]
+    int m_px;
+    
     int m_currentLP;
-    /* TODO: this must be a const int. For now, will remain int for debug puposes */
-    int m_baseStats[6]; // HPMax, Atk, Def, SpeAtk, SpeDef, Speed
-    int m_stats[6]; // HPMax, Atk, Def, SpeAtk, SpeDef, Speed
-    int m_IV[6];    // HP, Atk, Def, SpeAtk, SpeDef, Speed : [0 -> 31]
-    int m_EV[6];    // HP, Atk, Def, SpeAtk, SpeDef, Speed : Max per stat: 252 // Global Max: 510
+    int* m_stats; // HPMax, Atk, Def, SpeAtk, SpeDef, Speed
+    int* m_IV;    // HP, Atk, Def, SpeAtk, SpeDef, Speed : [0 -> 31]
+    int* m_EV;    // HP, Atk, Def, SpeAtk, SpeDef, Speed : Max per stat: 252 // Global Max: 510
     
     /* TODO: remove comment
     Move m_moves[4]; // Max 4
+    State (paralysed, asleep, poisoned, ...)
     */
-    // MoveTable
-    // State (paralysed, asleep, poisoned, ...)
 
 
     /* Gen II
@@ -63,21 +52,17 @@ private:
     int m_happiness;
     int m_affection;
     Object m_heldItem;
-    POKERUS (date of infection, contagious, has it?)
     */
 
 
     /* Gen III
     Nature m_nature;
-    string m_like;
+    POKERUS (date of infection, contagious, has it?)
     Ability m_talent;
     */
 
     /*
-    int m_metLevel;
-    date m_metDate;
-    string m_metPlace;
-    int m_variant; // Alt. forms (Alola, Galar), Motisma, Exagide, Alt Sprites
+    int m_variant; // Alt. forms (Alola, Galar), Motisma, Exagide, Alt Sprites (Zarbi)
     Région d'origine, isForeign() // Gain supp d'xp
     Mega Evolution
     Z-Moves
@@ -90,12 +75,7 @@ public:
     // for debug purposes
     Pokemon(); 
 
-    /*
-    in: nothing
-    retval: unique specie identifier (a.k.a the row in DB)
-    error: must be strictly positive
-    */
-    int specieID();
+    ~Pokemon(); // Cuz we need it
     
     /*
     in: nothing
@@ -155,22 +135,7 @@ public:
     string DOName();
     int DOSecretID();
 
-    // [1 -> 255]
-    int* baseStats();
-    int baseStats(int index);
-    void baseStat(int index, int ammount);
-    int baseLP();
-    void baseLP(int ammount);
-    int baseAtk();
-    void baseAtk(int ammount);
-    int baseDef();
-    void baseDef(int ammount);
-    int baseSpeAtk();
-    void baseSpeAtk(int ammount);
-    int baseSpeDef();
-    void baseSpeDef(int ammount);
-    int baseSpeed();
-    void baseSpeed(int ammount);
+    
 
     int LP(); // [0 -> m_stats[0]]
     int maxLP();
@@ -202,6 +167,7 @@ public:
     void computeSpeDef();
     void computeSpeed();
     void computeStat(int index);
+    void computeStats();
 
     
     /* TODO: remove comment
