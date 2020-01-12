@@ -222,7 +222,7 @@ void Pokemon::removeLP(int ammount)
 
 }
 
-int* Pokemon::stats()
+array<int, 6> Pokemon::stats()
 {
     return m_stats;
 }
@@ -257,7 +257,7 @@ int Pokemon::speed()
     return m_stats[5];
 }
 
-int* Pokemon::IV()
+array<int, 6> Pokemon::IV()
 {
     return m_IV;
 }
@@ -307,7 +307,7 @@ void Pokemon::removeIV(int index, int ammount)
     computeStat(index);
 }
 
-int* Pokemon::EV()
+array<int, 6> Pokemon::EV()
 {
     return m_EV;
 }

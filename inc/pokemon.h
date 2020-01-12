@@ -37,9 +37,9 @@ private:
     int m_px;
     
     int m_currentLP;
-    int* m_stats; // HPMax, Atk, Def, SpeAtk, SpeDef, Speed
-    int* m_IV;    // HP, Atk, Def, SpeAtk, SpeDef, Speed : [0 -> 31]
-    int* m_EV;    // HP, Atk, Def, SpeAtk, SpeDef, Speed : Max per stat: 252 // Global Max: 510
+    array<int, 6> m_stats; // HPMax, Atk, Def, SpeAtk, SpeDef, Speed
+    array<int, 6> m_IV;    // HP, Atk, Def, SpeAtk, SpeDef, Speed : [0 -> 31]
+    array<int, 6> m_EV;    // HP, Atk, Def, SpeAtk, SpeDef, Speed : Max per stat: 252 // Global Max: 510
     
     /* TODO: remove comment
     Move m_moves[4]; // Max 4
@@ -142,18 +142,18 @@ public:
     void setLP(int ammount);
     void addLP(int ammount);
     void removeLP(int ammount);
-    int* stats();
+    array<int, 6> stats();
     int atk();
     int def();
     int speAtk();
     int speDef();
     int speed();
-    int* IV();
+    array<int, 6> IV();
     int IV(int index);
     void setIV(int index, int newAmmount);
     void addIV(int index, int ammount);
     void removeIV(int index, int ammount);
-    int* EV();
+    array<int, 6> EV();
     int EV(int index);
     int totalEV();
     void setEV(int index, int newAmmount);
