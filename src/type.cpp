@@ -1,11 +1,11 @@
 #include "../inc/type.h"
 
-float efficiency(Type attackType, Type defenseType)
+float efficiency(int attackType, int defenseType)
 {
-    return efficiency_values[int(defenseType)][int(attackType)];
+    return m_efficiency_values[defenseType][attackType];
 }
 
-string efficiency_text_debug(Type attackType, Type defenseType)
+string efficiency_text_debug(int attackType, int defenseType)
 {
     float frac = efficiency(attackType, defenseType);
     if (frac == 0.0)
