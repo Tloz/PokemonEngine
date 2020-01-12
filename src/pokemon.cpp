@@ -13,7 +13,6 @@ Pokemon::Pokemon() : Specie()
     // m_type[1] = 0;
     m_px = 500;
 
-    m_baseStats = new int[6];
     m_baseStats[0] = 35;
     m_baseStats[1] = 55;
     m_baseStats[2] = 40;
@@ -21,9 +20,6 @@ Pokemon::Pokemon() : Specie()
     m_baseStats[4] = 50;
     m_baseStats[5] = 90;
 
-    m_IV = new int[6];
-    m_EV = new int[6];
-    m_stats = new int[6];
     for (int i = 0; i < 6; ++i)
     {
         m_IV[i] = 0;
