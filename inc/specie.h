@@ -30,7 +30,7 @@ protected:
     float m_weight;
     // Gen II EggGroup m_group;
     // Gen II int m_stepsToHatch;
-    int m_EVGiven[2]; // 0 is type, 1 is value
+    array<int, 2> m_EVGiven; // 0 is type, 1 is value
     int m_baseExp;
     // GrowthRate m_growthRate; // aka Exp at lvl 100
     int m_captureRate;
