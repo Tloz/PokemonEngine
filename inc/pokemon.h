@@ -4,7 +4,7 @@
 #include "gender.h"
 #include "specie.h"
 #include "type.h"
-#include "move.h"
+// #include "move.h"
 // #include "object.h"
 // #include "ability.h"
 

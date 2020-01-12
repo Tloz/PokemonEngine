@@ -1,6 +1,16 @@
 #include "../inc/specie.h"
 
+Specie::Specie()
+{
+
+}
+
 Specie::Specie(int id, int variant = 0)
+{
+
+}
+
+Specie::~Specie()
 {
     
 }
@@ -102,4 +112,58 @@ int Specie::baseSpeed()
 void Specie::baseSpeed(int ammount)
 {
     baseStat(5, ammount);
+}
+
+int Specie::type(int index)
+{
+    if(!isTypeNumberValid(m_type[index]))
+        throw exception();
+    return m_type[index];
+}
+
+int Specie::firstType()
+{
+    return type(0);
+}
+
+int Specie::secondType()
+{
+    return type(1);
+}
+
+// TODO: make sure this is clean
+// int* Specie::types()
+// {
+//     for (int i = 0; i < 2; ++i)
+//     {
+//         /* code */
+//     }
+//     return m_types;
+// }
+
+void Specie::type(int index, int p_type)
+{
+    if((index < 0) || (index > 1))
+        throw exception();
+    if(!isTypeNumberValid(p_type))
+        throw exception();
+    m_type[index] = p_type;
+}
+
+void Specie::firstType(int p_type)
+{
+    type(0, p_type);
+}
+
+void Specie::secondType(int p_type)
+{
+    type(1, p_type);
+}
+
+void Specie::types(array<int, 2> tab)
+{
+    if(!isTypeTabValid(tab))
+        throw exception();
+    m_type.swap(tab);
+    
 }

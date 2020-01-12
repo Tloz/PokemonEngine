@@ -1,7 +1,7 @@
 #include <math.h>
 #include "../inc/pokemon.h"
 
-Pokemon::Pokemon()
+Pokemon::Pokemon() : Specie()
 {
     // Implementation de Pikachu
     m_specieID = 25;

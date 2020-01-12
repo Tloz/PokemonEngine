@@ -1,35 +1,40 @@
 #ifndef SPECIE_H_
 #define SPECIE_H_
 #include <string>
+#include <array>
 #include "pkmnexceptions.h"
+#include "type.h"
 
 using namespace std;
 
 class Specie
 {
+private:
+    int* m_dexNumbers;
+    string m_category;
+    // Gen III Ability* m_posibleTalents;
+    int m_genderBalance; // aka chances of beingFemale
+    string m_color;
+    int m_bodyShape;
+    int m_footPrint;
+    string* m_dexEntries;
+    // const location* m_locations;
+
+
 protected:
     int m_specieID; // equals to national dex number
-    const int m_variant;
+    int m_variant;
     string m_specieName;
-    int* m_dexNumbers;
-    // Type* m_type;
-    string m_category;
+    array<int, 2> m_type;
     float m_size;
     float m_weight;
-    // Gen III Ability m_talent;
     // Gen II EggGroup m_group;
     // Gen II int m_stepsToHatch;
     int m_EVGiven[2]; // 0 is type, 1 is value
     int m_baseExp;
     // GrowthRate m_growthRate; // aka Exp at lvl 100
-    int m_genderBalance; // aka chances of beingFemale
-    string m_color;
     int m_captureRate;
-    int m_bodyShape;
-    int m_footPrint;
     int m_sound;
-    string* m_dexEntries;
-    // const location* m_locations;
 
     /* TODO: this must be a const int. For now, will remain int for debug puposes */
     int* m_baseStats; // HPMax, Atk, Def, SpeAtk, SpeDef, Speed
@@ -38,6 +43,7 @@ protected:
     // MovePool (By Leveling, DT)
 
 public:
+    Specie();
     Specie(int id, int variant);
     ~Specie();
 
@@ -64,6 +70,15 @@ public:
     void baseSpeDef(int ammount);
     int baseSpeed();
     void baseSpeed(int ammount);
+
+    int type(int index);
+    int firstType();
+    int secondType();
+    array<int, 2> types();
+    void type(int index, int type);
+    void firstType(int type);
+    void secondType(int type);
+    void types(array<int, 2> tab);
     
 };
 
