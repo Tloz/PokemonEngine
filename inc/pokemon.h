@@ -29,9 +29,9 @@ private:
     string m_DOName;
     int m_DOSecretID;
     
-    int m_metLevel;
-    // date m_metDate;
-    string m_metPlace;
+    // int m_metLevel;
+    // // date m_metDate;
+    // string m_metPlace;
 
     int m_level; // [1 -> 100]
     int m_px;
@@ -44,13 +44,14 @@ private:
     /* TODO: remove comment
     Move m_moves[4]; // Max 4
     State (paralysed, asleep, poisoned, ...)
+    other state (confusion, ...)
+    Buffs
     */
 
 
     /* Gen II
     bool m_shiny;
     int m_happiness;
-    int m_affection;
     Object m_heldItem;
     */
 
