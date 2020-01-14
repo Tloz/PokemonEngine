@@ -31,7 +31,6 @@ protected:
     Cat m_category;
     int m_priority; // [-7; 8]
     int m_ppBase;
-    bool m_contact;
     int m_criticalLevel;
     int m_scareRate;
     TargetClass m_target;

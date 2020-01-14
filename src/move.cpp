@@ -57,7 +57,31 @@ int Move::ppMax()
 
 bool Move::contact()
 {
-    return m_contact;
+    // List of physical attacks that dont make contact
+    int tab1[1] = {0}; // TODO: Populate
+    // List of special attacks that make contact
+    int tab2[1] = {0}; // TODO: Populate
+
+    if(category() == Cat::Physical)
+    {
+        for (int i = 0; i < 1; ++i)
+        {
+            if(tab1[i] == moveID())
+                return false;
+        }
+        return true;
+    }
+    else if(category() == Cat::Special)
+    {
+        for (int i = 0; i < 1; ++i)
+        {
+            if(tab2[i] == moveID())
+                return true;
+        }
+        return false;
+    }
+    else
+        return false;
 }
 
 int Move::criticalLevel()
