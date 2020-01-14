@@ -68,7 +68,7 @@ public:
     bool canBeParalysed();
     bool canBeBurned();
     bool canBeFrozen();
-
+    bool immuneToPowder();
     bool canBeLeeched();
     float multWhenHitBy(Type_t what);
 
