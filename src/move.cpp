@@ -80,6 +80,11 @@ int Move::scareRate()
     return m_scareRate;
 }
 
+TargetClass Move::target()
+{
+    return m_target;
+}
+
 
 bool Move::affectedByProtectAndDetect()
 {
@@ -131,7 +136,8 @@ bool Move::affectedByMagicCoatOrMagicBounce()
 
 bool Move::affectedByBrightPowder()
 {
-    return (category() == Cat::Status);
+    bool doesntTargetFoe = ((target() != TargetClass::OneTeam) || (target() != TargetClass::None));
+    return ((category() == Cat::Status) && doesntTargetFoe);
 }
 
 bool Move::affectedByKingsRock()

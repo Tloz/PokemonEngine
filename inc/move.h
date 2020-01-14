@@ -10,6 +10,15 @@ enum class Cat
     Status
 };
 
+enum class TargetClass
+{
+    None,
+    OneFoe,
+    OneTeam,
+    AdjFoe,
+    AdjTeam
+};
+
 class Move
 {
 
@@ -25,7 +34,7 @@ protected:
     bool m_contact;
     int m_criticalLevel;
     int m_scareRate;
-    // Targets
+    TargetClass m_target;
 
 public:
     Move();
@@ -43,6 +52,7 @@ public:
     int criticalLevel();
     float criticalRate();
     int scareRate();
+    TargetClass target();
 
     bool affectedByProtectAndDetect();
     bool affectedBySnatch();
