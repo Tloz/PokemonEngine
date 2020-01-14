@@ -3,27 +3,28 @@
 #include <string>
 #include "type.h"
 #include "pkmnexceptions.h"
-enum class Category
+enum class Cat
 {
     Physical,
     Special,
     Status
-}
+};
 
 class Move
 {
+
 protected:
     int m_moveID;
     string m_name;
     int m_power; // [0; 250]
     int m_precision; // [0; 100]
     Type* m_type;
-    Category m_cat;
-    int priority; // [-7; 8]
+    Cat m_category;
+    int m_priority; // [-7; 8]
     int m_ppBase;
     bool m_contact;
     int m_criticalLevel;
-    int scareRate;
+    int m_scareRate;
     // Targets
 
 public:
@@ -34,7 +35,7 @@ public:
     int power();
     int precision();
     Type* type();
-    Category category();
+    Cat category();
     int priority();
     int ppBase();
     int ppMax();

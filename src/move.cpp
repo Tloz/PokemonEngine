@@ -1,3 +1,5 @@
+#include "../inc/move.h"
+
 Move::Move()
 {
 
@@ -8,7 +10,7 @@ Move::~Move()
 
 }
 
-int moveID()
+int Move::moveID()
 {
     return m_moveID;
 }
@@ -33,9 +35,9 @@ Type* Move::type()
     return m_type;
 }
 
-Category Move::category()
+Cat Move::category()
 {
-    return m_category
+    return m_category;
 }
 
 int Move::priority()
@@ -45,12 +47,12 @@ int Move::priority()
 
 int Move::ppBase()
 {
-    return ppBase;
+    return m_ppBase;
 }
 
 int Move::ppMax()
 {
-    return ppBase * 1.6; // add 60%
+    return ppBase() * 1.6; // add 60%
 }
 
 bool Move::contact()
@@ -66,7 +68,7 @@ int Move::criticalLevel()
 float Move::criticalRate()
 {
     int tab[4] = {24, 8, 2, 1};
-    return 1.0 / tab[criticalLevel - 1];
+    return 1.0 / tab[criticalLevel() - 1];
 }
 
 int Move::scareRate()
@@ -129,7 +131,7 @@ bool Move::affectedByMagicCoatOrMagicBounce()
 
 bool Move::affectedByBrightPowder()
 {
-    return (category() == Category::Status);
+    return (category() == Cat::Status);
 }
 
 bool Move::affectedByKingsRock()
