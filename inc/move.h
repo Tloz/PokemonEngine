@@ -13,6 +13,7 @@ enum class Cat
 enum class TargetClass
 {
     None,
+    Self,
     OneFoe,
     OneTeam,
     AdjFoe,
@@ -34,6 +35,8 @@ protected:
     int m_criticalLevel;
     int m_scareRate;
     TargetClass m_target;
+    // int m_effetChance;
+    // void* m_sideEffectFunction;
 
 public:
     Move();
