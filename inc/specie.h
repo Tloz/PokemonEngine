@@ -11,37 +11,39 @@ using namespace std;
 class Specie
 {
 private:
-    vector<int> m_dexNumbers;
-    string m_category;
-    // Gen III Ability* m_posibleTalents;
     int m_genderBalance; // aka chances of beingFemale
-    string m_color;
-    int m_bodyShape;
-    int m_footPrint;
-    string* m_dexEntries;
-    // const location* m_locations;
-
+ 
+    /*
+        // vector<int> m_dexNumbers;
+        // string m_category;
+        // // Gen III Ability* m_posibleTalents;
+        // string m_color;
+        // int m_bodyShape;
+        // int m_footPrint;
+        // string* m_dexEntries;
+        // const location* m_locations;
+    */
 
 protected:
+    string m_specieName;
     int m_specieID; // equals to national dex number
     int m_variant;
-    string m_specieName;
     array<Type*, 2> m_type;
-    float m_size;
-    float m_weight;
-    // Gen II EggGroup m_group;
-    // Gen II int m_stepsToHatch;
-    array<int, 2> m_EVGiven; // 0 is type, 1 is value
-    int m_baseExp;
-    int m_captureRate;
-    int m_sound;
-
-    /* TODO: this must be a const int. For now, will remain int for debug puposes */
     array<int, 6> m_baseStats; // HPMax, Atk, Def, SpeAtk, SpeDef, Speed
 
-    // GrowthRate m_growthRate; // aka Exp at lvl 100
-    // EvolutionLine m_line;
-    // MovePool (By Leveling, DT)
+    /*
+        // float m_size;
+        // float m_weight;
+        // // Gen II EggGroup m_group;
+        // // Gen II int m_stepsToHatch;
+        // array<int, 2> m_EVGiven; // 0 is type, 1 is value
+        // int m_baseExp;
+        // int m_captureRate;
+        // int m_sound;
+        // GrowthRate m_growthRate; // aka Exp at lvl 100
+        // EvolutionLine m_line;
+        // MovePool (By Leveling, DT)
+    */
 
 public:
     Specie();
@@ -49,6 +51,9 @@ public:
     ~Specie();
 
     int specieID();
+    void specieID(int id);
+    int variant();
+    void variant(int id);
 
     // [1 -> 255]
     array<int, 6> baseStats();

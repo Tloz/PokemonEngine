@@ -2,7 +2,8 @@
 
 Specie::Specie()
 {
-
+    //
+    // this is a test
 }
 
 Specie::Specie(int id, int variant = 0)
@@ -13,7 +14,8 @@ Specie::Specie(int id, int variant = 0)
 
 Specie::~Specie()
 {
-    
+    //
+    //  
 }
 
 int Specie::specieID()
@@ -21,8 +23,30 @@ int Specie::specieID()
     return m_specieID;
 }
 
+
+void specieID(int id)
+{
+    if(id >= 0)
+        m_specieID = id;
+    else
+        throw exception();
+}
+
+int variant()
+{
+    return m_variant;
+}
+void variant(int id)
+{
+    if(id >= 0)
+        m_variant = id;
+    else
+        throw exception();
+}
+
 array<int, 6> Specie::baseStats()
 {
+    // Before returning the array, make sure values are within borders
     for (int i = 0; i <= 5; ++i)
     {
         if(m_baseStats[i] < 1)
@@ -35,6 +59,7 @@ array<int, 6> Specie::baseStats()
 
 int Specie::baseStat(int index)
 {
+    // make sure index and value are within proper borders
     if((index < 0) || (index > 5))
         throw exception();
     if(m_baseStats[index] < 1)
@@ -46,6 +71,7 @@ int Specie::baseStat(int index)
 
 void Specie::baseStat(int index, int ammount)
 {
+    // make sure index and value are within proper borders
     if((index < 0) || (index > 5))
         throw exception();
     if(ammount < 1)
@@ -142,6 +168,7 @@ array<Type*, 2> Specie::types()
 
 void Specie::type(int index, Type* p_type)
 {
+    // make sure index and value are within proper borders
     if((index < 0) || (index > 1))
         throw exception();
     if(!isTypeNumberValid(int(p_type->value())))
@@ -161,7 +188,8 @@ void Specie::secondType(Type* p_type)
 
 void Specie::types(array<Type*, 2> tab)
 {
-    if((isTypeNumberValid(int(tab[0]->value()))) && (isTypeNumberValid(int(tab[1]->value()))))
+    if((isTypeNumberValid(int(tab[0]->value())))
+    && (isTypeNumberValid(int(tab[1]->value()))))
         m_type.swap(tab);  
     else
         throw exception();
@@ -169,5 +197,6 @@ void Specie::types(array<Type*, 2> tab)
 
 bool Specie::isOfType(Type* p_type)
 {
-    return ((firstType()->value() == p_type->value()) || (secondType()->value() == p_type->value()));
+    return ((firstType()->value() == p_type->value()) 
+        || (secondType()->value() == p_type->value()));
 }

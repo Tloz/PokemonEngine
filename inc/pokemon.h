@@ -4,7 +4,7 @@
 #include "gender.h"
 #include "specie.h"
 #include "type.h"
-// #include "move.h"
+// #include "knownMove.h"
 // #include "object.h"
 // #include "ability.h"
 
@@ -20,18 +20,14 @@ using namespace std;
 
 class Pokemon : public Specie
 {
-private:
-    string m_name; // specieName or nickname
-    Gender m_gender; // 0 = none, 1 = male, 2 = female
-    int m_personalityValue; // From 0 to 4 294 967 295
 
+private:
     int m_DOID;
     string m_DOName;
     int m_DOSecretID;
-    
-    // int m_metLevel;
-    // // date m_metDate;
-    // string m_metPlace;
+    string m_name; // specieName or nickname
+    Gender m_gender; // 0 = none, 1 = male, 2 = female
+    int m_personalityValue; // From 0 to 4 294 967 295
 
     int m_level; // [1 -> 100]
     int m_px;
@@ -42,7 +38,7 @@ private:
     array<int, 6> m_EV;    // HP, Atk, Def, SpeAtk, SpeDef, Speed : Max per stat: 252 // Global Max: 510
     
     /* TODO: remove comment
-    Move m_moves[4]; // Max 4
+    vector<KnownMove> m_moves; // Max 4
     State (paralysed, asleep, poisoned, ...)
     other state (confusion, ...)
     Buffs
@@ -73,53 +69,14 @@ private:
 
 public:
 
-    // for debug purposes
     Pokemon(); 
-
-    ~Pokemon(); // Cuz we need it
-    
-    /*
-    in: nothing
-    retval: nickname 
-    error: must not be empty
-    */
+    virtual ~Pokemon() = 0;
     string name();
-
-    /*
-    in: the new name
-    retval: nothing
-    error: newName must not be empty
-    */
     void name(string newName);
-
-    /*
-    in: nothing
-    retval: the pokemon's gender as (Gender::) None, Male, or Female
-    error: retval is not inNone, Male, or Female
-    */
     Gender gender();
-
-    /*
-    in: the new gender as the pokemon's gender as (Gender::) None, Male, or Female
-    retval: nothing
-    error: newGender is not in None, Male, or Female
-    */
     void gender(Gender newGender);
-
-    /*
-    in: nothing
-    retval: a int pointer
-    error: no types are set (min 1) or more than two are set
-    */
-    //Type* type(); // Max 2
-
-    /*
-    in: array (pointer on max two types)
-    retval: nothing
-    error: more than two types given or less than 1
-    */
-    //void type(Type types[2]);
-
+    Type* type(); // Max 2
+    void type(Type types[2]);
 
     
     int level(); // [1 -> 100]
