@@ -2,7 +2,12 @@
 
 bool isTypeNumberValid(int number)
 {
-    return (number >= 0) && (number <= 18);
+    return (number >= 0)&& (number <= 18);
+}
+
+Type::Type()
+{
+    m_value = Type_t::None;
 }
 
 Type::Type(Type_t value)
@@ -30,6 +35,24 @@ Type_t Type::value()
 {
     return m_value;
 }
+
+Type* Type::getType(Type_t value)
+{
+    Type *t = new Type(value);
+    return t;
+}
+
+Type* Type::getType(int value)
+{
+    Type *t = new Type(value);
+    return t;
+}
+
+float Type::multWhenHitBy(Type_t what)
+{
+    return efficiencyTab[int(m_value)][int(what)];
+}
+
 
 bool Type::isTouchingFloor()
 {
@@ -66,7 +89,4 @@ bool Type::canBeLeeched()
     return m_value != Type_t::Grass;
 }
 
-float Type::multWhenHitBy(Type_t what)
-{
-    return efficiencyTab[int(m_value)][int(what)];
-}
+

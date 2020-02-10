@@ -59,10 +59,15 @@ private:
     Type_t m_value;
 
 public:
+    Type();
     Type(Type_t value);
     Type(int value);
     ~Type();
     Type_t value();
+    float multWhenHitBy(Type_t what);
+    static Type* getType(Type_t value);
+    static Type* getType(int value);
+
     bool isTouchingFloor();
     bool canBePoisoned();
     bool canBeParalysed();
@@ -70,7 +75,7 @@ public:
     bool canBeFrozen();
     bool immuneToPowder();
     bool canBeLeeched();
-    float multWhenHitBy(Type_t what);
+    
 
     
 };
