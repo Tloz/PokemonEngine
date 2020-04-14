@@ -51,7 +51,7 @@ enum Type_t
     Water 
 };
 
-bool isTypeNumberValid(int number);
+bool isTypeNumberValid(int number); // checks that given number is between 0(included) and 18 (excluded)
 
 class Type
 {
@@ -65,6 +65,7 @@ public:
     ~Type();
     string name();
     Type_t value();
+    
     float multWhenHitBy(Type_t what);
     static Type* getType(Type_t value);
     static Type* getType(int value);

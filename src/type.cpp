@@ -1,8 +1,9 @@
 #include "../inc/type.h"
 
+// checks that given number is between 0(included) and 18 (excluded)
 bool isTypeNumberValid(int number)
 {
-    return (number >= 0)&& (number <= 18);
+    return (number >= 0) && (number < 18);
 }
 
 Type::Type()
@@ -21,7 +22,9 @@ Type::Type(Type_t value)
 Type::Type(int value)
 {
     if(isTypeNumberValid(Type_t(value)))
+    {
         m_value = Type_t(value);
+    }
     else
         m_value = Type_t::None; // If given type is invalid, default to None
 }
@@ -136,7 +139,6 @@ float Type::multWhenHitBy(Type_t what)
 {
     return efficiencyTab[int(m_value)][int(what)];
 }
-
 
 bool Type::isTouchingFloor()
 {

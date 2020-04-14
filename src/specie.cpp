@@ -13,8 +13,8 @@ Specie::Specie(int testVal)
     m_baseStats[3] = TABSpeATK[testVal];
     m_baseStats[4] = TABSpeDEF[testVal];
     m_baseStats[5] = TABSpeed[testVal];
-    m_type[0] = TABtypes1[testVal];
-    m_type[1] = TABtypes2[testVal];
+    m_type[0] = new Type(TABtypes1[testVal]);
+    m_type[1] = new Type(TABtypes2[testVal]);
     m_genderBalance = TABgenderBalance[testVal];
 }
 
@@ -37,15 +37,13 @@ void Specie::print()
         cout << " " << m_variantName;
     cout << " (" << m_specieID << ")" << endl;
     cout << "Type: " << firstType()->name();
-    if (secondType()->value() != Type_t::None)
-    {
+    if (hasSecondType())
         cout << " and " << secondType()->name();
-    }
     cout << endl;
-    cout << "LP: " << baseStat(0) << " Speed: " << baseStat(6) << endl;
+    cout << "LP: " << baseStat(0) << " Speed: " << baseStat(5) << endl;
     cout << "ATK: " << baseStat(1) << " DEF: " << baseStat(2) << endl;
     cout << "ATK: " << baseStat(3) << " DEF: " << baseStat(4) << endl;
-    cout << m_genderBalance << "% chances of being female" << endl;
+    cout << m_genderBalance << "% chances of being female" << endl << endl;
 }
 
 int Specie::specieID()
@@ -98,7 +96,7 @@ array<int, 6> Specie::baseStats()
 
 int Specie::baseStat(int index)
 {
-    // make sure index and value are within proper borders
+    // make sure index and value are within proper borders and range
     if((index < 0) || (index > 5))
         throw exception();
     if(m_baseStats[index] < 1)
@@ -183,7 +181,9 @@ void Specie::baseSpeed(int ammount)
 Type* Specie::type(int index)
 {
     if(!isTypeNumberValid(int(m_type[index]->value())))
+    {
         throw exception();
+    }
     return m_type[index];
 }
 
@@ -240,18 +240,27 @@ bool Specie::isOfType(Type* p_type)
         || (secondType()->value() == p_type->value()));
 }
 
-vector<Evolution*> Specie::evolutionLine()
+bool Specie::hasSecondType()
 {
-    return m_evolutionLine;
+    if (secondType()->value() == Type_t::None)
+    {
+        return false;
+    }
+    return true;
 }
 
-vector<Evolution*> Specie::evolveWith(EvolutionTrigger trigger)
-{
-    vector<Evolution*> retarray;
-    for (unsigned int i = 0; i < evolutionLine().size(); ++i)
-    {
-        if(evolutionLine().at(i)->trigger() == trigger)
-            retarray.push_back(evolutionLine().at(i));
-    }
-    return retarray;
-}
+// vector<Evolution*> Specie::evolutionLine()
+// {
+//     return m_evolutionLine;
+// }
+
+// vector<Evolution*> Specie::evolveWith(EvolutionTrigger trigger)
+// {
+//     vector<Evolution*> retarray;
+//     for (unsigned int i = 0; i < evolutionLine().size(); ++i)
+//     {
+//         if(evolutionLine().at(i)->trigger() == trigger)
+//             retarray.push_back(evolutionLine().at(i));
+//     }
+//     return retarray;
+// }
