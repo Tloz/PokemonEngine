@@ -1,9 +1,12 @@
 #ifndef POKEMON_H_
 #define POKEMON_H_
 
+#include <vector>
+
 #include "gender.h"
 #include "specie.h"
 #include "type.h"
+#include "evolution.h"
 // #include "knownMove.h"
 // #include "object.h"
 // #include "ability.h"
@@ -29,8 +32,8 @@ private:
     Gender m_gender; // 0 = none, 1 = male, 2 = female
     int m_personalityValue; // From 0 to 4 294 967 295
 
-    int m_level; // [1 -> 100]
     int m_px;
+    int m_level; // [1 -> 100]
     
     int m_currentLP;
     array<int, 6> m_stats; // HPMax, Atk, Def, SpeAtk, SpeDef, Speed
@@ -79,8 +82,9 @@ public:
     void type(Type types[2]);
 
     
-    int level(); // [1 -> 100]
+    int level(); // [1 -> 100]*
     void setLevel(int newLevel);
+    void levelUp();
     void addLevel(int ammount);
     void removeLevel(int ammount);
     int px();
@@ -127,7 +131,9 @@ public:
     void computeStat(int index);
     void computeStats();
 
-    
+    void evolve(int specie, int variant);
+    bool meetAllConditions(Evolution* evo);
+
     /* TODO: remove comment
     Move* moves(); // Max 4
     */

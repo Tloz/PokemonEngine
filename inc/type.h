@@ -5,7 +5,7 @@
 #include <array>
 
 using namespace std;
-static float efficiencyTab[19][19] = 
+static float efficiencyTab[19][19] = // Whatever you do, DO NOT MESS WITH THAT !!!
     {
      {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
      {1.0, 0.5, 1.0, 1.0, 2.0, 2.0, 1.0, 1.0, 1.0, 0.5, 1.0, 1.0, 2.0, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0},
@@ -63,6 +63,7 @@ public:
     Type(Type_t value);
     Type(int value);
     ~Type();
+    string name();
     Type_t value();
     float multWhenHitBy(Type_t what);
     static Type* getType(Type_t value);

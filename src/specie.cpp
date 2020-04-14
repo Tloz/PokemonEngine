@@ -1,9 +1,21 @@
+#include "../data/values.h"
 #include "../inc/specie.h"
+#include <iostream>
 
-Specie::Specie()
+Specie::Specie(int testVal)
 {
-    //
-    // this is a test
+    m_specieName = TABnames[testVal];
+    m_specieID = TABspecieID[testVal];
+    m_variant = TABvariantID[testVal];
+    m_baseStats[0] = TABLP[testVal];
+    m_baseStats[1] = TABATK[testVal];
+    m_baseStats[2] = TABDEF[testVal];
+    m_baseStats[3] = TABSpeATK[testVal];
+    m_baseStats[4] = TABSpeDEF[testVal];
+    m_baseStats[5] = TABSpeed[testVal];
+    m_type[0] = TABtypes1[testVal];
+    m_type[1] = TABtypes2[testVal];
+    m_genderBalance = TABgenderBalance[testVal];
 }
 
 Specie::Specie(int id, int variant = 0)
@@ -18,13 +30,30 @@ Specie::~Specie()
     //  
 }
 
+void Specie::print()
+{
+    cout << "Specie " << m_specieName;
+    if(m_variant != 0)
+        cout << " " << m_variantName;
+    cout << " (" << m_specieID << ")" << endl;
+    cout << "Type: " << firstType()->name();
+    if (secondType()->value() != Type_t::None)
+    {
+        cout << " and " << secondType()->name();
+    }
+    cout << endl;
+    cout << "LP: " << baseStat(0) << " Speed: " << baseStat(6) << endl;
+    cout << "ATK: " << baseStat(1) << " DEF: " << baseStat(2) << endl;
+    cout << "ATK: " << baseStat(3) << " DEF: " << baseStat(4) << endl;
+    cout << m_genderBalance << "% chances of being female" << endl;
+}
+
 int Specie::specieID()
 {
     return m_specieID;
 }
 
-
-void specieID(int id)
+void Specie::specieID(int id)
 {
     if(id >= 0)
         m_specieID = id;
@@ -32,16 +61,26 @@ void specieID(int id)
         throw exception();
 }
 
-int variant()
+int Specie::variant()
 {
     return m_variant;
 }
-void variant(int id)
+void Specie::variant(int id)
 {
     if(id >= 0)
         m_variant = id;
     else
         throw exception();
+}
+
+string Specie::variantName()
+{
+    return m_variantName;
+}
+
+void Specie::variantName(string name)
+{
+    m_variantName = name;
 }
 
 array<int, 6> Specie::baseStats()
@@ -199,4 +238,20 @@ bool Specie::isOfType(Type* p_type)
 {
     return ((firstType()->value() == p_type->value()) 
         || (secondType()->value() == p_type->value()));
+}
+
+vector<Evolution*> Specie::evolutionLine()
+{
+    return m_evolutionLine;
+}
+
+vector<Evolution*> Specie::evolveWith(EvolutionTrigger trigger)
+{
+    vector<Evolution*> retarray;
+    for (unsigned int i = 0; i < evolutionLine().size(); ++i)
+    {
+        if(evolutionLine().at(i)->trigger() == trigger)
+            retarray.push_back(evolutionLine().at(i));
+    }
+    return retarray;
 }

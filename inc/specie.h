@@ -5,6 +5,7 @@
 #include <vector>
 #include "pkmnexceptions.h"
 #include "type.h"
+#include "evolution.h"
 
 using namespace std;
 
@@ -28,8 +29,10 @@ protected:
     string m_specieName;
     int m_specieID; // equals to national dex number
     int m_variant;
+    string m_variantName;
     array<Type*, 2> m_type;
     array<int, 6> m_baseStats; // HPMax, Atk, Def, SpeAtk, SpeDef, Speed
+    vector<Evolution*> m_evolutionLine;
 
     /*
         // float m_size;
@@ -46,14 +49,17 @@ protected:
     */
 
 public:
-    Specie();
+    Specie(int testVal);
     Specie(int id, int variant);
     ~Specie();
+    void print();
 
     int specieID();
     void specieID(int id);
     int variant();
     void variant(int id);
+    string variantName();
+    void variantName(string name);
 
     // [1 -> 255]
     array<int, 6> baseStats();
@@ -81,6 +87,9 @@ public:
     void secondType(Type* type);
     void types(array<Type*, 2> tab);
     bool isOfType(Type* p_type);
+
+    vector<Evolution*> evolutionLine();
+    vector<Evolution*> evolveWith(EvolutionTrigger trigger);
     
 };
 

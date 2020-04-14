@@ -31,6 +31,90 @@ Type::~Type()
 
 }
 
+string Type::name()
+{
+    switch(m_value)
+    {
+        case Dark:
+            return "Dark";
+            break;
+
+        case Dragon:
+            return "Dragon";
+            break;
+
+        case Electric:
+        return "Electric";
+            break;
+
+        case Fairy:
+        return "Fairy";
+            break;
+
+        case Fight:
+        return "Fight";
+            break;
+
+        case Fire:
+        return "Fire";
+            break;
+
+        case Floor:
+        return "Floor";
+            break;
+
+        case Fly:
+        return "Fly";
+            break;
+
+        case Ghost:
+        return "Ghost";
+            break;
+
+        case Grass:
+        return "Grass";
+            break;
+
+        case Ice:
+        return "Ice";
+            break;
+
+        case Insect:
+        return "Insect";
+            break;
+
+        case Normal:
+        return "Normal";
+            break;
+
+        case Poison:
+        return "Poison";
+            break;
+
+        case Psy:
+        return "Psy";
+            break;
+
+        case Rock:
+        return "Rock";
+            break;
+
+        case Steel:
+        return "Steel";
+            break;
+
+        case Water:
+        return "Water";
+            break;
+
+        case None:
+        default:
+        return "None";
+            break;
+    }
+
+}
+
 Type_t Type::value()
 {
     return m_value;

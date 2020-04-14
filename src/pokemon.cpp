@@ -3,41 +3,8 @@
 
 Pokemon::Pokemon() : Specie()
 {
-    // Implementation de Pikachu
-    m_specieID = 25;
-    m_name = "Pikachu";
-    m_gender = Gender::Male;
-    m_level = 10;
-    // m_type = new int[2];
-    // m_type[0] = 4;
-    // m_type[1] = 0;
-    m_px = 500;
 
-    m_baseStats[0] = 35;
-    m_baseStats[1] = 55;
-    m_baseStats[2] = 40;
-    m_baseStats[3] = 50;
-    m_baseStats[4] = 50;
-    m_baseStats[5] = 90;
-
-    for (int i = 0; i < 6; ++i)
-    {
-        m_IV[i] = 0;
-        m_EV[i] = 0;
-        m_stats[i] = 0;
-    }
-    computeStats();
-
-
-    m_personalityValue = 3456363;
-    m_DOID = 65345;
-    m_DOName = "Emeric";
-    m_DOSecretID = 4152;
-
-    m_currentLP = 68;
 }
-
-
 
 string Pokemon::name()
 {
@@ -106,6 +73,11 @@ void Pokemon::setLevel(int newLevel)
     computeStats();
 }
 
+void Pokemon::levelUp()
+{
+    addLevel(1);
+}
+
 void Pokemon::addLevel(int ammount)
 {
     // Make sure  we ADD levels, must be positive
@@ -117,6 +89,24 @@ void Pokemon::addLevel(int ammount)
         m_level += threshold;
     else
         m_level += ammount;
+
+    // Get all evolutions that triggers by level 
+    // and checks them. Evolves the first one that can
+    vector<Evolution*> targets = evolveWith(EvolutionTrigger::LevelUp);
+    if(targets.size() != 0)
+    {
+        for (unsigned int i = 0; i < targets.size(); ++i)
+        {
+            Evolution* target = targets.at(i);
+            if(meetAllConditions(target))
+            {
+                evolve(target->who()->specieID(), target->who()->variant());
+                break;
+            }
+        }
+    }
+
+    // Update stats
     computeStats();
 }
 
@@ -345,7 +335,7 @@ void Pokemon::addEV(int index, int ammount)
     if((index < 0) || (index > 5))
         throw exception();
     if (ammount < 0)
-        ammount = -ammount;
+        ammount =- ammount;
     int t1 = EV_MAX_LOCAL - m_EV[index];
     int t2 = EV_MAX_GLOBAL - m_EV[index];
     int threshold = min(t1, t2);
@@ -432,6 +422,94 @@ void Pokemon::computeStats()
     }
 }
 
+// Si une des conditions n'est pas remplie, renvoie false
+// Sinon, renvoie true
+bool Pokemon::meetAllConditions(Evolution* evo)
+{
+    vector<pair<EvolutionCondition, EvolutionValue>> cond = evo->conditions();
+    for (unsigned int i = 0; i < cond.size(); ++i)
+    {
+        switch(int(cond.at(i).first))
+        {
+            case int(EvolutionCondition::MinLevel):
+            if(cond.at(i).second.getInt() < m_level)
+                return false;
+            break;
+
+            case int(EvolutionCondition::Item):
+            //do something
+            break;
+
+            case int(EvolutionCondition::HeldItem):
+            //do something
+            break;
+
+            case int(EvolutionCondition::MinHappiness):
+            //do something
+            break;
+
+            case int(EvolutionCondition::TimeOfDay): // can be Day or Nigh
+            //do something
+            break;
+            /*
+            case int(EvolutionCondition::Gender):
+            //do something
+            break;
+
+            case int(EvolutionCondition::MinBeauty):
+            //do something
+            break;
+
+            case int(EvolutionCondition::RelativePhysicalStats):
+            //do something
+            break;
+
+            case int(EvolutionCondition::Location):
+            //do something
+            break;
+
+            case int(EvolutionCondition::KnownMove):
+            //do something
+            break;
+
+            case int(EvolutionCondition::KnownMoveType):
+            //do something
+            break;
+
+            case int(EvolutionCondition::PartySpecies):
+            //do something
+            break;
+
+            case int(EvolutionCondition::PartyType):
+            //do something
+            break;
+
+            case int(EvolutionCondition::OverworldWeather):
+            //do something
+            break;
+
+            case int(EvolutionCondition::TradeSpecies):
+            //do something
+            break;
+
+            case int(EvolutionCondition::TurnUpsideDown):
+            //do something
+            break;
+            */
+            case int(EvolutionCondition::None):
+            default:
+            //do something
+            break;
+        }
+    }
+    return true;
+}
+
+
+void Pokemon::evolve(int specie, int variant)
+{
+
+}
 
 /* TODO: remove comment
 Move* Pokemon::moves()
