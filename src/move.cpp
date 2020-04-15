@@ -1,8 +1,68 @@
 #include "../inc/move.h"
 
-Move::Move()
+string targetClassName(TargetClass t)
 {
+    // switch()
+    // {
+    //     case :
 
+    //         break;
+
+    //     case :
+
+    //         break;
+
+    //     default:
+    //         break;
+    // }
+    return "UnDeTeRmInEd";
+}
+string catName(Cat category)
+{
+    switch(category)
+    {
+        case Cat::Physical:
+            return "Physical";
+            break;
+
+        case Cat::Special:
+            return "Special";
+            break;
+
+        case Cat::Status:
+            return "Status";
+            break;
+
+        default:
+            return "uDeTeRmInEd";
+            break;
+    }
+}
+Move::Move(int ID, string name, Type_t type, int power, int pre, Cat cat, int pp)
+{
+    m_moveID = ID;
+    m_name = name;
+    m_power = power;
+    m_precision = pre;
+    m_type = new Type(type);
+    m_category = cat;
+    m_ppBase = pp;
+}
+
+Move::Move(int ID, string name, int power, int pre, Type_t type, Cat cat, int prio, int pp, int critLevel, int scare, TargetClass tg, bool dir)
+{
+    m_moveID = ID;
+    m_name = name;
+    m_power = power;
+    m_precision = pre;
+    m_type = new Type(type);
+    m_category = cat;
+    m_priority = prio;
+    m_ppBase = pp;
+    m_criticalLevel = critLevel;
+    m_scareRate = scare;
+    m_target = tg;
+    m_direct = dir;
 }
 
 Move::~Move()
@@ -57,31 +117,7 @@ int Move::ppMax()
 
 bool Move::contact()
 {
-    // List of physical attacks that dont make contact
-    int tab1[1] = {0}; // TODO: Populate
-    // List of special attacks that make contact
-    int tab2[1] = {0}; // TODO: Populate
-
-    if(category() == Cat::Physical)
-    {
-        for (int i = 0; i < 1; ++i)
-        {
-            if(tab1[i] == moveID())
-                return false;
-        }
-        return true;
-    }
-    else if(category() == Cat::Special)
-    {
-        for (int i = 0; i < 1; ++i)
-        {
-            if(tab2[i] == moveID())
-                return true;
-        }
-        return false;
-    }
-    else
-        return false;
+    return m_direct;
 }
 
 int Move::criticalLevel()
@@ -92,7 +128,7 @@ int Move::criticalLevel()
 float Move::criticalRate()
 {
     int tab[4] = {24, 8, 2, 1};
-    return 1.0 / tab[criticalLevel() - 1];
+    return 1.0 / tab[m_criticalLevel - 1];
 }
 
 int Move::scareRate()
@@ -109,84 +145,49 @@ TargetClass Move::target()
     return m_target;
 }
 
+array<bool, 4> Move::affectedBy()
+{
+    return m_affectedBy;
+}
+
+bool Move::affectedBy(int index)
+{
+    if((index >= 0) && (index <= 3))
+    {
+        return m_affectedBy[index];
+    }
+    else
+        throw exception();
+}
+
 
 bool Move::affectedByProtectAndDetect()
 {
-    // contient les moveID des attaques qui ne sont pas affectées
-    int tab[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // TODO: inclure le moveID de
-    /*
-    Boost
-    Carnareket
-    Conversion2
-    Hurlement
-    Imitation
-    Malédiction
-    Morphing
-    Possessif
-    Prescience
-    Requiem
-    */
-    for (int i = 0; i < 1; ++i)
-    {
-        if(tab[i] == moveID())
-            return false;
-    }
-    return true;
+    return affectedBy(0);
 }
 
 bool Move::affectedBySnatch()
 {
-    // contient les moveID des attaques qui ne sont pas affectées
-    int tab[1] = {0}; // TODO: inclure le moveID de Coupd'main
-    for (int i = 0; i < 1; ++i)
-    {
-        if(tab[i] == moveID())
-            return false;
-    }
-    return true;
+    return affectedBy(1);
 }
 
 bool Move::affectedByMagicCoatOrMagicBounce()
 {
-    // contient les moveID des attaques qui ne sont pas affectées
-    int tab[2] = {0, 0}; // TODO: inclure les moveID de danse folle et malédiction
-    for (int i = 0; i < 2; ++i)
-    {
-        if(tab[i] == moveID())
-            return false;
-    }
-    return true;
+    return affectedBy(2);
 }
 
 bool Move::affectedByBrightPowder()
 {
-    bool doesntTargetFoe = ((target() != TargetClass::OneTeam) || (target() != TargetClass::None));
-    return ((category() == Cat::Status) && doesntTargetFoe);
+    return affectedBy(3);
 }
 
 bool Move::affectedByKingsRock()
 {
+    // N'est affectée que si l'attaque a un scareRate de 0
     return (scareRate() == 0);
 }
 
 bool Move::isPowder()
 {
-    
-    // contient les moveID des attaques qui ne sont pas affectées
-    int tab[7] = {0, 0, 0, 0, 0, 0, 0}; // TODO: inclure les moveID de 
-    /*
-    Nuée de Poudre
-    Para-Spore
-    Poudre Dodo
-    Poudre Fureur
-    Poudre Toxik
-    Spore
-    Spore Coton
-    */
-    for (int i = 0; i < 2; ++i)
-    {
-        if(tab[i] == moveID())
-            return false;
-    }
-    return true;
+    return m_isPowder;
 }

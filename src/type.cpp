@@ -1,9 +1,9 @@
 #include "../inc/type.h"
 
-// checks that given number is between 0(included) and 18 (excluded)
+// checks that given number is between 0 and 18 (included)
 bool isTypeNumberValid(int number)
 {
-    return (number >= 0) && (number < 18);
+    return (number >= 0) && (number <= 18);
 }
 
 Type::Type()

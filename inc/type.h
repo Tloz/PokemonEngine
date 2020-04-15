@@ -51,7 +51,7 @@ enum Type_t
     Water 
 };
 
-bool isTypeNumberValid(int number); // checks that given number is between 0(included) and 18 (excluded)
+bool isTypeNumberValid(int number); // checks that given number is between 0 and 18 (included)
 
 class Type
 {

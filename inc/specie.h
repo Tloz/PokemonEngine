@@ -49,17 +49,19 @@ protected:
     */
 
 public:
-    Specie(int testVal);
     Specie(int id, int variant);
     ~Specie();
-    void print();
 
     int specieID();
     void specieID(int id);
+    string specieName();
+    void specieName(string newName);
     int variant();
     void variant(int id);
     string variantName();
     void variantName(string name);
+    float genderBalance();
+    void genderBalance(float val);
 
     // [1 -> 255]
     array<int, 6> baseStats();

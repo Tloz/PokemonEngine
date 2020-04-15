@@ -2,22 +2,6 @@
 #include "../inc/specie.h"
 #include <iostream>
 
-Specie::Specie(int testVal)
-{
-    m_specieName = TABnames[testVal];
-    m_specieID = TABspecieID[testVal];
-    m_variant = TABvariantID[testVal];
-    m_baseStats[0] = TABLP[testVal];
-    m_baseStats[1] = TABATK[testVal];
-    m_baseStats[2] = TABDEF[testVal];
-    m_baseStats[3] = TABSpeATK[testVal];
-    m_baseStats[4] = TABSpeDEF[testVal];
-    m_baseStats[5] = TABSpeed[testVal];
-    m_type[0] = new Type(TABtypes1[testVal]);
-    m_type[1] = new Type(TABtypes2[testVal]);
-    m_genderBalance = TABgenderBalance[testVal];
-}
-
 Specie::Specie(int id, int variant = 0)
 {
     m_specieID = id;
@@ -26,24 +10,18 @@ Specie::Specie(int id, int variant = 0)
 
 Specie::~Specie()
 {
-    //
-    //  
+    delete m_type;
+    delete m_baseStats;
 }
 
-void Specie::print()
+float Specie::genderBalance()
 {
-    cout << "Specie " << m_specieName;
-    if(m_variant != 0)
-        cout << " " << m_variantName;
-    cout << " (" << m_specieID << ")" << endl;
-    cout << "Type: " << firstType()->name();
-    if (hasSecondType())
-        cout << " and " << secondType()->name();
-    cout << endl;
-    cout << "LP: " << baseStat(0) << " Speed: " << baseStat(5) << endl;
-    cout << "ATK: " << baseStat(1) << " DEF: " << baseStat(2) << endl;
-    cout << "ATK: " << baseStat(3) << " DEF: " << baseStat(4) << endl;
-    cout << m_genderBalance << "% chances of being female" << endl << endl;
+    return m_genderBalance;
+}
+
+void Specie::genderBalance(float val)
+{
+    m_genderBalance = val;
 }
 
 int Specie::specieID()
@@ -57,6 +35,20 @@ void Specie::specieID(int id)
         m_specieID = id;
     else
         throw exception();
+}
+
+string Specie::specieName()
+{
+    if(m_specieName.size() == 0)
+        throw exception();
+    return m_specieName;
+}
+
+void Specie::specieName(string newName)
+{
+    if(newName.size() == 0)
+        throw exception();
+    m_specieName = newName;
 }
 
 int Specie::variant()
