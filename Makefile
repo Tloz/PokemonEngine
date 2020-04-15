@@ -3,33 +3,41 @@ CFLAGS=-W -Wall -Wextra --std=c++11 -pedantic
 CFLAGSSTRICT=-Werror
 CFLAGSCHEAT=-fpermissive -Wunused-variable
 
-type.o: src/type.cpp
-	$(CC) -o obj/$@ -c src/type.cpp $(CFLAGS) $(CFLAGSSTRICT)
+#type: obj/type.o
 
-move.o: src/move.cpp
-	$(CC) -o obj/$@ -c src/move.cpp $(CFLAGS)
+#move: obj/move.o
 
-specie.o: src/specie.cpp
-	$(CC) -o obj/$@ -c $< $(CFLAGS) $(CFLAGSCHEAT)
+#specie: obj/specie.o
 
-pokemon.o: src/pokemon.cpp
-	$(CC) -o obj/$@ -c $< $(CFLAGS)
+#pokemon: obj/pokemon.o
 
-testType: type.o
-	$(CC) obj/type.o tests/testType.cpp -o bin/$@ $(CFLAGS) $(CFLAGSCHEAT)
+obj/type.o: src/type.cpp
+	$(CC) -c $^ -o $@ $(CFLAGS) $(CFLAGSSTRICT)
 
-testMove: move.o
-	$(CC) obj/move.o tests/testMove.cpp -o bin/$@ $(CFLAGS)
+obj/move.o: src/move.cpp obj/type.o
+	$(CC) -c $^ -o $@ $(CFLAGS)
 
-testSpecie: specie.o
-	$(CC) obj/specie.o tests/testSpecie.cpp -o bin/$@ $(CFLAGS)
+obj/specie.o: src/specie.cpp obj/type.o
+	$(CC) -c $^ -o $@ $(CFLAGS) $(CFLAGSCHEAT)
 
-testPKMN: pokemon.o
-	$(CC) obj/pokemon.o tests/testPKMN.cpp -o bin/$@ $(CFLAGS)
+obj/pokemon.o: src/pokemon.cpp obj/specie.o
+	$(CC) -c $^ -o $@ $(CFLAGS)
+
+testType: obj/type.o tests/testType.cpp
+	$(CC) $^ -o bin/$@ $(CFLAGS) $(CFLAGSCHEAT)
+
+testMove: obj/type.o obj/move.o tests/testMove.cpp
+	$(CC) $^ -o bin/$@ $(CFLAGS)
+
+testSpecie: obj/type.o obj/specie.o tests/testSpecie.cpp
+	$(CC) $^ -o bin/$@ $(CFLAGS)
+
+testPKMN: obj/pokemon.o tests/testPKMN.cpp
+	$(CC) $^ -o bin/$@ $(CFLAGS)
 
 clean:
 	rm -rf *.o
 	rm -rf obj/*.o
 
-cleanall: clean
+mrproper: clean
 	rm -rf bin/*
