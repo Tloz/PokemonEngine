@@ -2,6 +2,7 @@
 #include "../data/values.h"
 #include <vector>
 
+
 void printSpecie(Specie s)
 {
     cout << "Specie " << s.specieName();
@@ -19,17 +20,22 @@ void printSpecie(Specie s)
 }
 
 int main()
-{
-    std::vector<Specie> v;
+{   
+    cout << "Debuging main" << endl;
     for (int i = 0; i < 17; ++i)
     {
-        Specie s(i);
-        v.push_back(s);
-    }
-    
-    for (int i = 0; i < 17; ++i)
-    {
-        printSpecie(v[i]);
+        Specie s(TABspecieID[i], TABvariantID[i]);
+        s.specieName(TABnames[i]);
+        s.baseStat(0, TABLP[i]);
+        s.baseStat(1, TABATK[i]);
+        s.baseStat(2, TABDEF[i]);
+        s.baseStat(3, TABSpeATK[i]);
+        s.baseStat(4, TABSpeDEF[i]);
+        s.baseStat(5, TABSpeed[i]);
+        s.type(0, new Type(TABtypes1[i]));
+        s.type(1, new Type(TABtypes2[i]));
+        s.genderBalance(TABgenderBalance[i]);
+        printSpecie(s);
     }
     return 0;
 }

@@ -1,4 +1,3 @@
-#include "../data/values.h"
 #include "../inc/specie.h"
 #include <iostream>
 
@@ -10,8 +9,10 @@ Specie::Specie(int id, int variant = 0)
 
 Specie::~Specie()
 {
-    delete m_type;
-    delete m_baseStats;
+    // for (int i = 0; i < 2; ++i)
+    // {
+    //     free m_type[i];
+    // }
 }
 
 float Specie::genderBalance()
