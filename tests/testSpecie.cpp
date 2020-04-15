@@ -21,7 +21,6 @@ void printSpecie(Specie s)
 
 int main()
 {   
-    cout << "Debuging main" << endl;
     for (int i = 0; i < 17; ++i)
     {
         Specie s(TABspecieID[i], TABvariantID[i]);
