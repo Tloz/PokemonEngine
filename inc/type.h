@@ -2,9 +2,9 @@
 #define TYPE_H_
 #include <iostream>
 #include <string>
-#include <array>
 
 using namespace std;
+
 static float efficiencyTab[19][19] = // Whatever you do, DO NOT MESS WITH THAT !!!
     {
      {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
