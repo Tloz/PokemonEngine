@@ -4,16 +4,17 @@
 #include <array>
 #include "type.h"
 #include "pkmnexceptions.h"
-enum class Cat
+
+enum Cat
 {
     Physical,
     Special,
     Status
 };
 
-enum class TargetClass
+enum TargetClass
 {
-    None,
+    NoTarget,
     Self,
     AnyFoe,
     AnyTeam,
