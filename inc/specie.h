@@ -6,6 +6,7 @@
 #include "pkmnexceptions.h"
 #include "type.h"
 #include "evolution.h"
+#include "utils.h"
 
 using namespace std;
 
@@ -32,6 +33,10 @@ protected:
     string m_variantName;
     array<Type*, 2> m_type;
     array<int, 6> m_baseStats; // HPMax, Atk, Def, SpeAtk, SpeDef, Speed
+
+    int m_baseExp;
+    int m_catchRate;
+    
     // vector<Evolution*> m_evolutionLine;
 
     /*
@@ -40,8 +45,6 @@ protected:
         // // Gen II EggGroup m_group;
         // // Gen II int m_stepsToHatch;
         // array<int, 2> m_EVGiven; // 0 is type, 1 is value
-        // int m_baseExp;
-        // int m_captureRate;
         // int m_sound;
         // GrowthRate m_growthRate; // aka Exp at lvl 100
         // EvolutionLine m_line;
@@ -50,6 +53,8 @@ protected:
 
 public:
     Specie(int id, int variant);
+    Specie(string filename);
+    Specie(int uid);
     ~Specie();
 
     int specieID();
@@ -60,6 +65,7 @@ public:
     void variant(int id);
     string variantName();
     void variantName(string name);
+    string fullName();
     float genderBalance();
     void genderBalance(float val);
 
@@ -90,6 +96,9 @@ public:
     void types(array<Type*, 2> tab);
     bool isOfType(Type* p_type);
     bool hasSecondType();
+
+    int catchRate();
+    void catchRate(int rate);
 
     // vector<Evolution*> evolutionLine();
     // vector<Evolution*> evolveWith(EvolutionTrigger trigger);

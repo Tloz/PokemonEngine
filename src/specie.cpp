@@ -1,10 +1,66 @@
 #include "../inc/specie.h"
 #include <iostream>
+#include <fstream>
+#include <string>
 
 Specie::Specie(int id, int variant = 0)
 {
     m_specieID = id;
     m_variant = variant;
+}
+
+Specie::Specie(string filename)
+{
+    string line;
+    ifstream myfile(filename);
+    if (myfile.is_open())
+    {
+        // specieID;variantID
+        getline(myfile,line);
+        vector<string> tokens = str_explode(line, ';');
+        specieID(stoi(tokens[0]));
+        variant(stoi(tokens[1]));
+
+        // name;nameExt
+        getline(myfile,line);
+        tokens = str_explode(line, ';');
+        specieName(tokens[0]);
+        if(tokens.size() != 1)
+            variantName(tokens[1]);
+
+        // Type1;Type2
+        getline(myfile,line);
+        tokens = str_explode(line, ';');
+        firstType(new Type(stoi(tokens[0])));
+        secondType(new Type(stoi(tokens[1])));
+
+        // baseStats(LP;ATK;DEF;SpeATK;SpeDEF;Speed)
+        getline(myfile,line);
+        tokens = str_explode(line, ';');
+        for (int i = 0; i < 6; ++i)
+            baseStat(i, stoi(tokens[i]));
+
+        // genderBalance
+        getline(myfile,line);
+        m_genderBalance = stof(line);
+        myfile.close();
+    }
+
+    else
+    {
+        cout << "Unable to open file " << filename << endl;
+        throw exception();
+    }
+
+    // On ouvre le fichier
+    // On itère pas, on parcourre le fichier
+    // On sépare les strings en plusieurs entitées qu'on affecte aux membres
+    // on ferme le ficher, au revoir merci
+    // m_specieID;m_variant
+    // m_name;m_variantName
+    // Type1;Type2
+    // Stats
+    // m_genderBalance
 }
 
 Specie::~Specie()
@@ -72,6 +128,11 @@ string Specie::variantName()
 void Specie::variantName(string name)
 {
     m_variantName = name;
+}
+
+string Specie::fullName()
+{
+    return m_specieName + " " + m_variantName;
 }
 
 array<int, 6> Specie::baseStats()
@@ -241,6 +302,17 @@ bool Specie::hasSecondType()
     }
     return true;
 }
+
+int Specie::catchRate()
+{
+    return m_catchRate;
+}
+
+void Specie::catchRate(int rate)
+{
+    m_catchRate = rate;
+}
+
 
 // vector<Evolution*> Specie::evolutionLine()
 // {

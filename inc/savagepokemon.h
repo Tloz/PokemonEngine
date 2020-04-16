@@ -5,8 +5,21 @@
 
 class SavagePokemon : public Pokemon
 {
+private:
 
-}
+
+protected:
+
+
+
+public:
+    SavagePokemon(int id, int variant, int level);
+    ~SavagePokemon();
+
+    int catchRate();
+    bool determineShinyness();
+    
+};
 
 
 #endif

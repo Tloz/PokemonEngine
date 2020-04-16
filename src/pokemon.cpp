@@ -1,57 +1,25 @@
 #include <math.h>
 #include "../inc/pokemon.h"
 
-Pokemon::Pokemon() : Specie()
+Pokemon::Pokemon(int id, int variant) : Specie(id, variant)
 {
-
-}
-
-string Pokemon::name()
-{
-    if(m_name.size() == 0)
-        throw EmptyNameException();
-    return m_name;
-}
-
-// specieName or nickname
-void Pokemon::name(string newName)
-{
-    if(newName.size() == 0)
-        throw EmptyNameException();
-    m_name = newName;
+    m_ipv = PersonalityValue();
+    m_gender = determineGender(genderBalance(), m_ipv.valueForGender());
 }
 
 Gender Pokemon::gender()
 {
     if((m_gender != Gender::None) && (m_gender != Gender::Female) && (m_gender != Gender::Male) )
-        throw UnknownGenderException();
+        throw exception();
     return m_gender;
 }
 
 void Pokemon::gender(Gender newGender)
 {
     if((m_gender != Gender::None) && (m_gender != Gender::Male) && (m_gender != Gender::Female))
-        throw UnknownGenderException();
+        throw exception();
     m_gender = newGender;
 }
-
-
-// Type* Pokemon::type()
-// {
-//     if((m_type == NULL) || (m_type[0] == Type(NULL)))
-//         throw NoTypeException();
-//     return m_type;
-// }
-
-// void Pokemon::type(Type type[2])
-// {
-//     if (type[0] == Type(NULL))
-//         throw NoTypeException();
-//     m_type[0] = type[0];
-//     if (type[1] != Type(NULL))
-//         m_type[1] = type[1];
-// }
-
 
 int Pokemon::level()
 {
@@ -90,6 +58,7 @@ void Pokemon::addLevel(int ammount)
     else
         m_level += ammount;
 
+    /* TODO: Implement evolution system
     // Get all evolutions that triggers by level 
     // and checks them. Evolves the first one that can
     vector<Evolution*> targets = evolveWith(EvolutionTrigger::LevelUp);
@@ -105,7 +74,7 @@ void Pokemon::addLevel(int ammount)
             }
         }
     }
-
+    */
     // Update stats
     computeStats();
 }
@@ -143,26 +112,10 @@ void Pokemon::removePX(int ammount)
     
 }
 */
-int Pokemon::personalityValue()
+PersonalityValue Pokemon::ipv()
 {
     // From 0 to 4 294 967 295
-    return m_personalityValue;
-}
-int Pokemon::DOID()
-{
-    return m_DOID;
-}
-
-string Pokemon::DOName()
-{
-    if (m_DOName.size() == 0)
-        throw exception();
-    return m_DOName;
-}
-
-int Pokemon::DOSecretID()
-{
-    return m_DOSecretID;
+    return m_ipv;
 }
 
 int Pokemon::LP()
@@ -243,7 +196,7 @@ int Pokemon::speed()
     return m_stats[5];
 }
 
-array<int, 6> Pokemon::IV()
+array<int, 6> Pokemon::IVs()
 {
     return m_IV;
 }
@@ -293,7 +246,7 @@ void Pokemon::removeIV(int index, int ammount)
     computeStat(index);
 }
 
-array<int, 6> Pokemon::EV()
+array<int, 6> Pokemon::EVs()
 {
     return m_EV;
 }
@@ -424,100 +377,91 @@ void Pokemon::computeStats()
 
 // Si une des conditions n'est pas remplie, renvoie false
 // Sinon, renvoie true
-bool Pokemon::meetAllConditions(Evolution* evo)
-{
-    vector<pair<EvolutionCondition, EvolutionValue>> cond = evo->conditions();
-    for (unsigned int i = 0; i < cond.size(); ++i)
-    {
-        switch(int(cond.at(i).first))
-        {
-            case int(EvolutionCondition::MinLevel):
-            if(cond.at(i).second.getInt() < m_level)
-                return false;
-            break;
+// bool Pokemon::meetAllConditions(Evolution* evo)
+// {
+//     vector<pair<EvolutionCondition, EvolutionValue>> cond = evo->conditions();
+//     for (unsigned int i = 0; i < cond.size(); ++i)
+//     {
+//         switch(int(cond.at(i).first))
+//         {
+//             case int(EvolutionCondition::MinLevel):
+//             if(cond.at(i).second.getInt() >= m_level)
+//                 return true;
+//             break;
 
-            case int(EvolutionCondition::Item):
-            //do something
-            break;
+//             case int(EvolutionCondition::Item):
+//             //do something
+//             break;
 
-            case int(EvolutionCondition::HeldItem):
-            //do something
-            break;
+//             case int(EvolutionCondition::HeldItem):
+//             //do something
+//             break;
 
-            case int(EvolutionCondition::MinHappiness):
-            //do something
-            break;
+//             case int(EvolutionCondition::MinHappiness):
+//             //do something
+//             break;
 
-            case int(EvolutionCondition::TimeOfDay): // can be Day or Nigh
-            //do something
-            break;
-            /*
-            case int(EvolutionCondition::Gender):
-            //do something
-            break;
+//             case int(EvolutionCondition::TimeOfDay): // can be Day or Nigh
+//             //do something
+//             break;
+            
+//             case int(EvolutionCondition::Gender):
+//             //do something
+//             break;
 
-            case int(EvolutionCondition::MinBeauty):
-            //do something
-            break;
+//             case int(EvolutionCondition::MinBeauty):
+//             //do something
+//             break;
 
-            case int(EvolutionCondition::RelativePhysicalStats):
-            //do something
-            break;
+//             case int(EvolutionCondition::RelativePhysicalStats):
+//             //do something
+//             break;
 
-            case int(EvolutionCondition::Location):
-            //do something
-            break;
+//             case int(EvolutionCondition::Location):
+//             //do something
+//             break;
 
-            case int(EvolutionCondition::KnownMove):
-            //do something
-            break;
+//             case int(EvolutionCondition::KnownMove):
+//             //do something
+//             break;
 
-            case int(EvolutionCondition::KnownMoveType):
-            //do something
-            break;
+//             case int(EvolutionCondition::KnownMoveType):
+//             //do something
+//             break;
 
-            case int(EvolutionCondition::PartySpecies):
-            //do something
-            break;
+//             case int(EvolutionCondition::PartySpecies):
+//             //do something
+//             break;
 
-            case int(EvolutionCondition::PartyType):
-            //do something
-            break;
+//             case int(EvolutionCondition::PartyType):
+//             //do something
+//             break;
 
-            case int(EvolutionCondition::OverworldWeather):
-            //do something
-            break;
+//             case int(EvolutionCondition::OverworldWeather):
+//             //do something
+//             break;
 
-            case int(EvolutionCondition::TradeSpecies):
-            //do something
-            break;
+//             case int(EvolutionCondition::TradeSpecies):
+//             //do something
+//             break;
 
-            case int(EvolutionCondition::TurnUpsideDown):
-            //do something
-            break;
-            */
-            case int(EvolutionCondition::None):
-            default:
-            //do something
-            break;
-        }
-    }
-    return true;
-}
+//             case int(EvolutionCondition::TurnUpsideDown):
+//             //do something
+//             break;
+            
+//             case int(EvolutionCondition::None):
+//             default:
+//             //do something
+//             break;
+//         }
+//     }
+//     return false;
+// }
 
 
 void Pokemon::evolve(int specie, int variant)
 {
 
-}
-
-/* TODO: remove comment
-Move* Pokemon::moves()
-*/
-
-string Pokemon::toString()
-{
-    return "";
 }
 
 Pokemon::~Pokemon()
