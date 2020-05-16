@@ -28,7 +28,7 @@ Specie PokeFactory::createSpecie(int id, int variantID)
     Specie retSpecie;
     try
     {
-        vector<vector<string>> tokens = getTokensFromFile(fileName);
+        vector<vector<string>> tokens = Parser::getTokensFromFile(fileName);
         retSpecie = Specie(tokens);
     }
     catch(exception const& e)
@@ -50,7 +50,7 @@ SavagePokemon PokeFactory::createUniqueSavagePokemon(string fileName)
     bool found1 = false;
     bool found2 = false;
 
-    vector<vector<string>> tokens = getTokensFromFile(filePoke);
+    vector<vector<string>> tokens = Parser::getTokensFromFile(filePoke);
     for(auto token:tokens)
     {
         if(token[0] == "SpecieID")
@@ -89,7 +89,7 @@ SavagePokemon PokeFactory::createUniqueSavagePokemon(string fileName)
     SavagePokemon retSPKMN;
     try
     {
-        retSPKMN = SavagePokemon(getTokensFromFile(fileSpecie), tokens);
+        retSPKMN = SavagePokemon(Parser::getTokensFromFile(fileSpecie), tokens);
     }
     catch(exception const& e)
     {
@@ -116,7 +116,7 @@ SavagePokemon PokeFactory::createSavagePokemon(int id, int level, int variantID)
     SavagePokemon retPKMN;
     try
     {
-        retPKMN = SavagePokemon(getTokensFromFile(fileName), level);
+        retPKMN = SavagePokemon(Parser::getTokensFromFile(fileName), level);
     }
     catch(exception const& e)
     {
@@ -137,7 +137,7 @@ TrainerPokemon PokeFactory::createTrainerPokemon(string identifier)
     bool found1 = false;
     bool found2 = false;
 
-    vector<vector<string>> tokens = getTokensFromFile(filePoke);
+    vector<vector<string>> tokens = Parser::getTokensFromFile(filePoke);
     for(auto token:tokens)
     {
         if(token[0] == "SpecieID")
@@ -173,7 +173,7 @@ TrainerPokemon PokeFactory::createTrainerPokemon(string identifier)
     TrainerPokemon retPKMN;
     try
     {
-        retPKMN = TrainerPokemon(getTokensFromFile(fileSpecie), tokens);
+        retPKMN = TrainerPokemon(Parser::getTokensFromFile(fileSpecie), tokens);
     }
     catch(exception const& e)
     {
@@ -190,7 +190,7 @@ void PokeFactory:: saveTrainerPokemon(TrainerPokemon *pkmn)
     filePoke += TRAINER_POKE_EXT;
     try
     {
-        writeTokensToFile(pkmn->tokens(), filePoke);
+        Parser::writeTokensToFile(pkmn->tokens(), filePoke);
     }
     catch(exception const& e)
     {

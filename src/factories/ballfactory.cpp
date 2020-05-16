@@ -16,7 +16,7 @@ Ball BallFactory::createBall(int ballType)
     Ball b;
     try
     {
-        b = Ball(getTokensFromFile(ballFileName));
+        b = Ball(Parser::getTokensFromFile(ballFileName));
     }
     catch(exception const& e)
     {

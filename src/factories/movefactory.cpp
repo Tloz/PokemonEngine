@@ -17,7 +17,7 @@ Move MoveFactory::createMove(int moveID)
     Move retval;
     try
     {
-        retval = Move(getTokensFromFile(fileName));
+        retval = Move(Parser::getTokensFromFile(fileName));
     }
     catch(exception const& e)
     {
@@ -39,7 +39,7 @@ KnownMove MoveFactory::createKnownMove(int moveID, int current, int max)
     KnownMove kn;
     try
     {
-        kn = KnownMove(getTokensFromFile(fileName), current, max);
+        kn = KnownMove(Parser::getTokensFromFile(fileName), current, max);
     }
     catch(exception const& e)
     {

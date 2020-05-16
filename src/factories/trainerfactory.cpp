@@ -16,7 +16,7 @@ Trainer TrainerFactory::loadPlayer()
     Trainer retval;
     try
     {;
-        retval = Trainer(getTokensFromFile(fileName));
+        retval = Trainer(Parser::getTokensFromFile(fileName));
     }
     catch(exception const& e)
     {
@@ -36,7 +36,7 @@ Trainer TrainerFactory::readTrainer(string identifier)
     Trainer retval;
     try
     {
-        retval = Trainer(getTokensFromFile(fileName));
+        retval = Trainer(Parser::getTokensFromFile(fileName));
     }
     catch(exception const& e)
     {

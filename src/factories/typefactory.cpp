@@ -16,7 +16,7 @@ Type TypeFactory::createType(int typeID)
     Type retType;
     try
     {
-        retType = Type(getTokensFromFile(fileName));
+        retType = Type(Parser::getTokensFromFile(fileName));
     }
     catch(exception const& e)
     {
