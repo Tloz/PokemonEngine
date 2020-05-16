@@ -11,7 +11,5 @@
 using namespace std;
 
 float randFloatInRange(float min, float max);
-vector<string> str_explode(string const & s, char delim);
-
 
 #endif

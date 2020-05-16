@@ -13,5 +13,6 @@ enum class Gender
 
 Gender determineGender(float balance, float vfg);
 std::string genderToString(Gender g);
+int genderToInt(Gender g);
 
 #endif
