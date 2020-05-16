@@ -1,7 +1,12 @@
 #include "../../inc/parser.h"
 #include <stdexcept>
 
-vector<string> str_explode(string const & s, char delim)
+string Parser::version()
+{
+    return PARSER_VERSION;
+}
+
+vector<string> Parser::str_explode(string const & s, char delim)
 {
     vector<string> result;
     istringstream iss(s);
@@ -13,7 +18,7 @@ vector<string> str_explode(string const & s, char delim)
     return result;
 }
 
-vector<vector<string>> getTokensFromFile(string fileName, char delimiter)
+vector<vector<string>> Parser::getTokensFromFile(string fileName, char delimiter)
 {
     bool verbose = false;
     if(verbose)
@@ -68,7 +73,7 @@ vector<vector<string>> getTokensFromFile(string fileName, char delimiter)
     return tokens;
 }
 
-string str_implode(vector<string> tokens, char delim)
+string Parser::str_implode(vector<string> tokens, char delim)
 {
     // TODO: tweak something here to get rid of final delim
     string retval = "";
@@ -79,7 +84,7 @@ string str_implode(vector<string> tokens, char delim)
     }
     return retval;
 }
-void writeTokensToFile(vector<vector<string>> tokens, string fileName)
+void Parser::writeTokensToFile(vector<vector<string>> tokens, string fileName)
 {
     // on ouvre le fichier, on écrit les tokens dedans, on ferme le fichier
     ofstream myfile(fileName);
