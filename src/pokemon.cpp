@@ -1,23 +1,62 @@
 #include <math.h>
+#include <fstream>
 #include "../inc/pokemon.h"
+#include "../inc/movefactory.h"
 
-Pokemon::Pokemon(int id, int variant) : Specie(id, variant)
+Pokemon::Pokemon() : Specie()
 {
-    m_ipv = PersonalityValue();
-    m_gender = determineGender(genderBalance(), m_ipv.valueForGender());
+
+}
+
+Pokemon::Pokemon(vector<vector<string>> tokensVector) : Specie(tokensVector)
+{
+    
+}
+
+Pokemon::~Pokemon()
+{
+
+}
+
+void Pokemon::print()
+{
+
+}
+
+string Pokemon::name()
+{
+    return m_specieName;
+}
+
+void Pokemon::name(string newName)
+{
+    if(newName.size() > 0)
+        m_name = newName;
+}
+
+string Pokemon::origin()
+{
+    return m_origin;
+}
+
+void Pokemon::origin(string newOrigin)
+{
+    m_origin = newOrigin;
 }
 
 Gender Pokemon::gender()
 {
     if((m_gender != Gender::None) && (m_gender != Gender::Female) && (m_gender != Gender::Male) )
-        throw exception();
+    {
+        throw invalid_argument("in Pokemon.gender()");
+    }
     return m_gender;
 }
 
 void Pokemon::gender(Gender newGender)
 {
     if((m_gender != Gender::None) && (m_gender != Gender::Male) && (m_gender != Gender::Female))
-        throw exception();
+        throw invalid_argument("in Pokemon.gender(newGender)");
     m_gender = newGender;
 }
 
@@ -91,12 +130,14 @@ void Pokemon::removeLevel(int ammount)
         m_level -= ammount;
     computeStats();
 }
-/*
+
 int Pokemon::px()
 {
-    
+    if(m_px > m_expAt100)
+        m_px = m_expAt100;
+    return m_px;
 }
-
+/*
 void Pokemon::setPX(int newAmmount)
 {
     
@@ -120,19 +161,23 @@ PersonalityValue Pokemon::ipv()
 
 int Pokemon::LP()
 {
+    int threshold = maxLP();
     if(m_currentLP < 0)
         m_currentLP = 0;
-    if(m_currentLP > m_stats[0])
-        m_currentLP = m_stats[0];
+    if(m_currentLP > threshold)
+        m_currentLP = threshold;
     return m_currentLP;
 }
  // [0 -> m_stats[0]]
 void Pokemon::setLP(int ammount)
 {
+    const int threshold = maxLP();
     if(ammount <= 0)
         m_currentLP = 0;
-    else if (ammount > m_stats[0])
-        m_currentLP = m_stats[0];
+    else if (ammount > threshold)
+        m_currentLP = threshold;
+    else
+        m_currentLP = ammount;
 }
 
 void Pokemon::addLP(int ammount)
@@ -158,7 +203,11 @@ void Pokemon::removeLP(int ammount)
     m_currentLP -= ammount;
     if(m_currentLP < 0)
         m_currentLP = 0;
+}
 
+void Pokemon::setLPToMax()
+{
+    m_currentLP = maxLP();
 }
 
 array<int, 6> Pokemon::stats()
@@ -377,94 +426,155 @@ void Pokemon::computeStats()
 
 // Si une des conditions n'est pas remplie, renvoie false
 // Sinon, renvoie true
-// bool Pokemon::meetAllConditions(Evolution* evo)
+/*
+bool Pokemon::meetAllConditions(Evolution* evo)
+{
+    vector<pair<EvolutionCondition, EvolutionValue>> cond = evo->conditions();
+    for (unsigned int i = 0; i < cond.size(); ++i)
+    {
+        switch(int(cond.at(i).first))
+        {
+            case int(EvolutionCondition::MinLevel):
+            if(cond.at(i).second.getInt() >= m_level)
+                return true;
+            break;
+
+            case int(EvolutionCondition::Item):
+            //do something
+            break;
+
+            case int(EvolutionCondition::HeldItem):
+            //do something
+            break;
+
+            case int(EvolutionCondition::MinHappiness):
+            //do something
+            break;
+
+            case int(EvolutionCondition::TimeOfDay): // can be Day or Nigh
+            //do something
+            break;
+            
+            case int(EvolutionCondition::Gender):
+            //do something
+            break;
+
+            case int(EvolutionCondition::MinBeauty):
+            //do something
+            break;
+
+            case int(EvolutionCondition::RelativePhysicalStats):
+            //do something
+            break;
+
+            case int(EvolutionCondition::Location):
+            //do something
+            break;
+
+            case int(EvolutionCondition::KnownMove):
+            //do something
+            break;
+
+            case int(EvolutionCondition::KnownMoveType):
+            //do something
+            break;
+
+            case int(EvolutionCondition::PartySpecies):
+            //do something
+            break;
+
+            case int(EvolutionCondition::PartyType):
+            //do something
+            break;
+
+            case int(EvolutionCondition::OverworldWeather):
+            //do something
+            break;
+
+            case int(EvolutionCondition::TradeSpecies):
+            //do something
+            break;
+
+            case int(EvolutionCondition::TurnUpsideDown):
+            //do something
+            break;
+            
+            case int(EvolutionCondition::None):
+            default:
+            //do something
+            break;
+        }
+    }
+    return false;
+}
+*/
+
+
+vector<KnownMove> Pokemon::moves()
+{
+    return m_moves;
+}
+
+void Pokemon::addMove(int moveID, int cur, int max)
+{
+    m_moves.push_back(MoveFactory::createKnownMove(moveID, cur, max));
+}
+
+void Pokemon::setMove(int moveID, int where)
+{
+    if((where < 0) || (where > 4))
+        throw exception();
+    m_moves[where] = MoveFactory::createKnownMove(moveID);
+}
+
+void Pokemon::setMove(int moveID, int where, int cur, int max)
+{
+    if((where < 0) || (where > 4))
+        throw exception();
+    m_moves[where] = MoveFactory::createKnownMove(moveID, cur, max);
+}
+
+
+
+void Pokemon::eraseMove(int where)
+{
+    if((where < 0) || (where > 4))
+        throw exception();
+    m_moves[where] = KnownMove();
+}
+
+NonVolatileStatus_t Pokemon::status()
+{
+    return m_status;
+}
+
+VolatileStatus_t Pokemon::condition()
+{
+    return m_condition;
+}
+
+VolatileBattleStatus_t Pokemon::BattleStatus()
+{
+    return m_battleStatus;
+}
+
+void Pokemon::status(NonVolatileStatus_t status)
+{
+    m_status = status;
+}
+
+void Pokemon::condition(VolatileStatus_t condition)
+{
+    m_condition = condition;
+}
+
+void Pokemon::battleStatus(VolatileBattleStatus_t battleStatus)
+{
+    m_battleStatus = battleStatus;
+}
+
+// void Pokemon::evolve(int specie, int variant)
 // {
-//     vector<pair<EvolutionCondition, EvolutionValue>> cond = evo->conditions();
-//     for (unsigned int i = 0; i < cond.size(); ++i)
-//     {
-//         switch(int(cond.at(i).first))
-//         {
-//             case int(EvolutionCondition::MinLevel):
-//             if(cond.at(i).second.getInt() >= m_level)
-//                 return true;
-//             break;
 
-//             case int(EvolutionCondition::Item):
-//             //do something
-//             break;
-
-//             case int(EvolutionCondition::HeldItem):
-//             //do something
-//             break;
-
-//             case int(EvolutionCondition::MinHappiness):
-//             //do something
-//             break;
-
-//             case int(EvolutionCondition::TimeOfDay): // can be Day or Nigh
-//             //do something
-//             break;
-            
-//             case int(EvolutionCondition::Gender):
-//             //do something
-//             break;
-
-//             case int(EvolutionCondition::MinBeauty):
-//             //do something
-//             break;
-
-//             case int(EvolutionCondition::RelativePhysicalStats):
-//             //do something
-//             break;
-
-//             case int(EvolutionCondition::Location):
-//             //do something
-//             break;
-
-//             case int(EvolutionCondition::KnownMove):
-//             //do something
-//             break;
-
-//             case int(EvolutionCondition::KnownMoveType):
-//             //do something
-//             break;
-
-//             case int(EvolutionCondition::PartySpecies):
-//             //do something
-//             break;
-
-//             case int(EvolutionCondition::PartyType):
-//             //do something
-//             break;
-
-//             case int(EvolutionCondition::OverworldWeather):
-//             //do something
-//             break;
-
-//             case int(EvolutionCondition::TradeSpecies):
-//             //do something
-//             break;
-
-//             case int(EvolutionCondition::TurnUpsideDown):
-//             //do something
-//             break;
-            
-//             case int(EvolutionCondition::None):
-//             default:
-//             //do something
-//             break;
-//         }
-//     }
-//     return false;
 // }
 
-
-void Pokemon::evolve(int specie, int variant)
-{
-
-}
-
-Pokemon::~Pokemon()
-{
-
-}

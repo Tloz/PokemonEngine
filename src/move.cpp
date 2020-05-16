@@ -1,68 +1,83 @@
 #include "../inc/move.h"
+#include "../inc/parser.h"
+#include "../inc/typefactory.h"
+#include <vector>
+#include <iomanip>
+#include <fstream>
 
-string targetClassName(TargetClass t)
+Move::Move()
 {
-    // switch()
-    // {
-    //     case :
-
-    //         break;
-
-    //     case :
-
-    //         break;
-
-    //     default:
-    //         break;
-    // }
-    return "UnDeTeRmInEd";
+    m_name = "Lutte";
+    m_power = 50;
+    m_precision = 100;
 }
-string catName(Cat category)
+
+Move::Move(vector<vector<string>> moveTokens)
 {
-    switch(category)
+    bool verbose = false;
+    vector<string> unsedTokens;
+    for(auto tokens:moveTokens)
     {
-        case Cat::Physical:
-            return "Physical";
-            break;
-
-        case Cat::Special:
-            return "Special";
-            break;
-
-        case Cat::Status:
-            return "Status";
-            break;
-
-        default:
-            return "uDeTeRmInEd";
-            break;
+        if(tokens[0] == "ID")
+        {
+            m_moveID = stoi(tokens[1]);
+        }
+        else if(tokens[0] == "Name")
+        {
+            m_name = tokens[1];
+        }
+        else if(tokens[0] == "Pow")
+        {
+            m_power = stoi(tokens[1]);
+        }
+        else if(tokens[0] == "Pre")
+        {
+            m_precision = stoi(tokens[1]);
+        }
+        else if(tokens[0] == "PPBase")
+        {
+            m_ppBase = stoi(tokens[1]);
+        }
+        else if(tokens[0] == "Type")
+        {
+            m_type = TypeFactory::createType(stoi(tokens[1]));
+        }
+        else if(tokens[0] == "Category")
+        {
+            m_category = Cat(stoi(tokens[1]));
+        }
+        else if(tokens[0] == "TargetClass")
+        {
+            m_target = TargetClass(stoi(tokens[1]));
+        }
+        else if(tokens[0] == "Direct")
+        {
+            m_direct = stoi(tokens[1]);
+        }
+        else if(tokens[0] == "Priority")
+        {
+            m_priority = stoi(tokens[1]);
+        }
+        else if(tokens[0] == "CritRate")
+        {
+             m_criticalLevel = stoi(tokens[1]);
+        }
+        else if(tokens[0] == "scareRate")
+        {
+            m_scareRate = stoi(tokens[1]);
+        }
+        else
+        {
+            unsedTokens.push_back(tokens[0]);
+        }
     }
-}
-Move::Move(int ID, string name, Type_t type, int power, int pre, Cat cat, int pp)
-{
-    m_moveID = ID;
-    m_name = name;
-    m_power = power;
-    m_precision = pre;
-    m_type = new Type(type);
-    m_category = cat;
-    m_ppBase = pp;
-}
-
-Move::Move(int ID, string name, int power, int pre, Type_t type, Cat cat, int prio, int pp, int critLevel, int scare, TargetClass tg, bool dir)
-{
-    m_moveID = ID;
-    m_name = name;
-    m_power = power;
-    m_precision = pre;
-    m_type = new Type(type);
-    m_category = cat;
-    m_priority = prio;
-    m_ppBase = pp;
-    m_criticalLevel = critLevel;
-    m_scareRate = scare;
-    m_target = tg;
-    m_direct = dir;
+    if(verbose && (unsedTokens.size() > 0))
+    {
+        cout << "Unused tokens: ";
+        for(auto token:unsedTokens)
+            cout << token << "; ";
+        cout << endl;
+    }
 }
 
 Move::~Move()
@@ -70,27 +85,44 @@ Move::~Move()
 
 }
 
+void Move::print()
+{
+    cout << "Attaque " << name() << " (PPbase/PPMax: " << ppBase() << "/" << ppMax() << ")" << endl;
+    cout << "Puissance: " << power() << " Précision: " << precision() << endl;
+    cout <<"Type: " << type().name() << " Categorie: " << catName() << endl;
+}
+
+
+
 int Move::moveID()
 {
+    if(m_moveID < 0)
+        m_moveID = 0;
     return m_moveID;
 }
 
 string Move::name()
 {
+    if(m_name.length() == 0)
+        m_name = "Attaque sans nom";
     return m_name;
 }
 
 int Move::power()
 {
+    if(m_power < 0)
+        m_power = 10;
     return m_power;
 }
 
 int Move::precision()
 {
+    if(m_precision < 0)
+        m_precision = 50;
     return m_precision;
 }
 
-Type* Move::type()
+Type Move::type()
 {
     return m_type;
 }
@@ -190,4 +222,52 @@ bool Move::affectedByKingsRock()
 bool Move::isPowder()
 {
     return m_isPowder;
+}
+
+string Move::targetClassName()
+{
+    switch(TargetClass())
+    {
+        case Self:
+            return "Soi-même";
+        case AnyFoe:
+            return "Un adversaire";
+        case AnyTeam:
+            return "Un équipier";
+        case AnyAdj:
+            return "Une cible adjacente";
+        case AdjFoe:
+            return "Un adversaire adjacent";
+        case AdjTeam:
+            return "Un équipier adjacent";
+        case AllButSelf:
+            return "Tout le monde sauf le lanceur";
+        case All:
+            return "Tout le monde";
+        case NoTarget:
+        default:
+            return "Aucune cible";
+    }
+}
+
+string Move::catName()
+{
+    switch(category())
+    {
+        case Cat::Physical:
+            return "Physical";
+            break;
+
+        case Cat::Special:
+            return "Special";
+            break;
+
+        case Cat::Status:
+            return "Status";
+            break;
+
+        default:
+            return "uDeTeRmInEd";
+            break;
+    }
 }

@@ -2,6 +2,7 @@
 #define MOVE_H_
 #include <string>
 #include <array>
+#include <vector>
 #include "type.h"
 #include "pkmnexceptions.h"
 
@@ -25,9 +26,6 @@ enum TargetClass
     All
 };
 
-string targetClassName(TargetClass t);
-string catName(Cat category);
-
 class Move
 {
 
@@ -35,7 +33,7 @@ protected:
     // Primary
     int m_moveID;
     string m_name;
-    Type* m_type;
+    Type m_type;
     int m_power; // [0; 250]
     int m_precision; // [0; 100]
     Cat m_category;
@@ -57,18 +55,22 @@ protected:
     // 3 for Bright Powder
 
 public:
-    Move(int ID, string name, Type_t type, int power, int pre, Cat cat, int pp);
-    Move(int ID, string name, int power, int pre, Type_t type, Cat cat, int prio, int pp, int critLevel, int scare, TargetClass tg, bool dir);
+    Move();
+    Move(vector< vector< string > > moveTokens);
     ~Move();
+    void print();
     // Primary
     int moveID();
     string name();
-    Type* type();
+    Type type();
     int power();
     int precision();
     Cat category();
     int ppBase();
     int ppMax();
+
+    string targetClassName();
+    string catName();
     // Secondary
     TargetClass target();
     int priority();
@@ -86,6 +88,5 @@ public:
     bool affectedByBrightPowder();
     bool affectedByKingsRock(); 
 };
-
 
 #endif  /* !MOVE_H_ */

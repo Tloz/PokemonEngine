@@ -2,73 +2,35 @@
 #define TYPE_H_
 #include <iostream>
 #include <string>
+#include <vector>
 
 using namespace std;
-
-static float efficiencyTab[19][19] = // Whatever you do, DO NOT MESS WITH THAT !!!
-    {
-     {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
-     {1.0, 0.5, 1.0, 1.0, 2.0, 2.0, 1.0, 1.0, 1.0, 0.5, 1.0, 1.0, 2.0, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0},
-     {1.0, 1.0, 2.0, 0.5, 2.0, 1.0, 0.5, 1.0, 1.0, 1.0, 0.5, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.5},
-     {1.0, 1.0, 1.0, 0.5, 1.0, 1.0, 1.0, 2.0, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.5, 1.0},
-     {1.0, 0.5, 0.0, 1.0, 1.0, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.5, 1.0, 2.0, 1.0, 1.0, 2.0, 1.0},
-     {1.0, 0.5, 1.0, 1.0, 2.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 1.0, 0.5, 1.0, 1.0, 2.0, 0.5, 1.0, 1.0},
-     {1.0, 1.0, 1.0, 1.0, 0.5, 1.0, 0.5, 2.0, 1.0, 1.0, 0.5, 0.5, 0.5, 1.0, 1.0, 1.0, 2.0, 0.5, 2.0},
-     {1.0, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 2.0, 1.0, 1.0, 0.5, 1.0, 0.5, 1.0, 2.0},
-     {1.0, 1.0, 1.0, 2.0, 1.0, 0.5, 1.0, 0.0, 1.0, 1.0, 0.5, 2.0, 0.5, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0},
-     {1.0, 2.0, 1.0, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 0.5, 0.0, 0.5, 1.0, 1.0, 1.0, 1.0},
-     {1.0, 1.0, 1.0, 0.5, 1.0, 1.0, 2.0, 0.5, 2.0, 1.0, 0.5, 2.0, 2.0, 1.0, 2.0, 1.0, 1.0, 1.0, 0.5},
-     {1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 2.0, 1.0, 1.0, 1.0, 1.0, 0.5, 1.0, 1.0, 1.0, 1.0, 2.0, 2.0, 1.0},
-     {1.0, 1.0, 1.0, 1.0, 1.0, 0.5, 2.0, 0.5, 2.0, 1.0, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0},
-     {1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
-     {1.0, 1.0, 1.0, 1.0, 0.5, 0.5, 1.0, 2.0, 1.0, 1.0, 0.5, 1.0, 0.5, 1.0, 0.5, 2.0, 1.0, 1.0, 1.0},
-     {1.0, 2.0, 1.0, 1.0, 1.0, 0.5, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 2.0, 1.0, 1.0, 0.5, 1.0, 1.0, 1.0},
-     {1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5, 1.0, 2.0, 1.0, 1.0, 0.5, 0.5, 1.0, 1.0, 2.0, 2.0},
-     {1.0, 1.0, 0.5, 1.0, 0.5, 2.0, 2.0, 2.0, 0.5, 1.0, 0.5, 0.5, 0.5, 0.5, 0.0, 0.5, 0.5, 0.5, 1.0},
-     {1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 0.5, 1.0, 1.0, 1.0, 2.0, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 0.5, 0.5}
-    };
-    
-enum Type_t
-{
-    None,
-    Dark,
-    Dragon,
-    Electric,
-    Fairy,
-    Fight,
-    Fire,
-    Floor,
-    Fly,
-    Ghost,
-    Grass,
-    Ice,
-    Insect,
-    Normal,
-    Poison,
-    Psy,
-    Rock,
-    Steel,
-    Water 
-};
 
 bool isTypeNumberValid(int number); // checks that given number is between 0 and 18 (included)
 
 class Type
 {
 private:
-    Type_t m_value;
+    int m_value;
+    string m_name;
+    vector<float> weaknesses;
+    vector<float> resistances;
+    vector<float> immunities;
 
 public:
     Type();
-    Type(Type_t value);
-    Type(int value);
+    Type(vector<vector<string>> tokens);
     ~Type();
-    string name();
-    Type_t value();
+    void print();
     
-    float multWhenHitBy(Type_t what);
-    static Type* getType(Type_t value);
-    static Type* getType(int value);
+    string name();
+    void name(string newName);
+    int value();
+    void value(int newVal);
+    static bool isNumberValid(int number); // checks that given number is between 0 and 18 (included)
+    
+    float multWhenHitBy(Type* what);
+    float multWhenHitBy(int typeId);
 
     bool isTouchingFloor();
     bool canBePoisoned();
@@ -85,10 +47,6 @@ public:
 // class Type
 // {
 // private:
-
-//     string m_typeNames[18] = {string("Ténèbres"), string("Dragon"), string("Électrik"), string("Fée"), string("Combat"), string("Feu"), 
-//          string("Sol"), string("Vol"), string("Spectre"), string("Plante"), string("Glace"), string("Insecte"), 
-//          string("Normal"), string("Poison"), string("Psy"), string("Roche"), string("Acier"), string("Eau")};
 
 //     static std::string* names();
 //     static float** efficiency_values();

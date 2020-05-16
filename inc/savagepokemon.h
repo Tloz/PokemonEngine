@@ -13,11 +13,15 @@ protected:
 
 
 public:
-    SavagePokemon(int id, int variant, int level);
+    SavagePokemon();
+    SavagePokemon(vector<vector<string> > specieTokens, int level);
+    SavagePokemon(vector<vector<string> > specieTokens, vector<vector<string> > pokeTokens);
     ~SavagePokemon();
+    void print();
 
     int catchRate();
     bool determineShinyness();
+    float catchBonus();
     
 };
 

@@ -1,74 +1,112 @@
 #include "../inc/specie.h"
+#include "../inc/parser.h"
+#include "../inc/typefactory.h"
 #include <iostream>
 #include <fstream>
 #include <string>
 
-Specie::Specie(int id, int variant = 0)
+Specie::Specie()
 {
-    m_specieID = id;
-    m_variant = variant;
+    
 }
 
-Specie::Specie(string filename)
+Specie::Specie(vector<vector<string>> tokensVector)
 {
-    string line;
-    ifstream myfile(filename);
-    if (myfile.is_open())
+    bool verbose = false;
+    vector<string> unsedTokens;
+    for(auto tokens:tokensVector)
     {
-        // specieID;variantID
-        getline(myfile,line);
-        vector<string> tokens = str_explode(line, ';');
-        specieID(stoi(tokens[0]));
-        variant(stoi(tokens[1]));
-
-        // name;nameExt
-        getline(myfile,line);
-        tokens = str_explode(line, ';');
-        specieName(tokens[0]);
-        if(tokens.size() != 1)
+        //cout << tokens[0] << ":" << tokens[1] << endl;
+        if(tokens[0] == "Specie")
+        {
+            specieID(stoi(tokens[1]));
+        }
+        else if(tokens[0] == "VariantID")
+        {
+            variant(stoi(tokens[1]));
+        }
+        else if(tokens[0] == "Name")
+        {
+            specieName(tokens[1]);
+        }
+        else if((tokens[0] == "NameExt") && (tokens.size() == 2))
+        {
             variantName(tokens[1]);
-
-        // Type1;Type2
-        getline(myfile,line);
-        tokens = str_explode(line, ';');
-        firstType(new Type(stoi(tokens[0])));
-        secondType(new Type(stoi(tokens[1])));
-
-        // baseStats(LP;ATK;DEF;SpeATK;SpeDEF;Speed)
-        getline(myfile,line);
-        tokens = str_explode(line, ';');
-        for (int i = 0; i < 6; ++i)
-            baseStat(i, stoi(tokens[i]));
-
-        // genderBalance
-        getline(myfile,line);
-        m_genderBalance = stof(line);
-        myfile.close();
+        }
+        else if(tokens[0] == "Types")
+        {
+            firstType(TypeFactory::createType(stoi(tokens[1])));
+            secondType(TypeFactory::createType(stoi(tokens[2])));
+        }
+        else if(tokens[0] == "Stats")
+        {
+            for (int i = 0; i < 6; ++i)
+                baseStat(i, stoi(tokens[i + 1]));
+        }
+        else if(tokens[0] == "GB")
+        {
+            m_genderBalance = stof(tokens[1]);
+        }
+        else if(tokens[0] == "CatchRate")
+        {
+            m_catchRate = stoi(tokens[1]);
+        }
+        else if(tokens[0] == "EffortValue")
+        {
+            vector<pair<int, int >> v;
+            for (unsigned int i = 1; i < tokens.size(); i = i + 2)
+            {
+                int EVIndex = stoi(tokens[i]);
+                int EVAmmount = stoi(tokens[i + 1]);
+                v.push_back(make_pair(EVIndex, EVAmmount));
+            }
+            EVGiven(v);
+        }
+        else if(tokens[0] == "BaseXP")
+        {
+            m_baseExp = stoi(tokens[1]);
+        }
+        else if(tokens[0] == "XPat100")
+        {
+            m_expAt100 = stoi(tokens[1]);
+        }
+        else
+        {
+            unsedTokens.push_back(tokens[0]);
+        }
     }
-
-    else
+    if(verbose && (unsedTokens.size() > 0))
     {
-        cout << "Unable to open file " << filename << endl;
-        throw exception();
+        cout << "Unused tokens: ";
+        for(auto token:unsedTokens)
+            cout << token << "; ";
+        cout << endl;
     }
-
-    // On ouvre le fichier
-    // On itère pas, on parcourre le fichier
-    // On sépare les strings en plusieurs entitées qu'on affecte aux membres
-    // on ferme le ficher, au revoir merci
-    // m_specieID;m_variant
-    // m_name;m_variantName
-    // Type1;Type2
-    // Stats
-    // m_genderBalance
 }
 
 Specie::~Specie()
 {
-    // for (int i = 0; i < 2; ++i)
-    // {
-    //     free m_type[i];
-    // }
+
+}
+
+void Specie::print()
+{
+    cout << "Specie " << specieName();
+    if((variant() != 0))
+    {
+        cout << " " << variantName();
+    }
+    cout << " (" << specieID() << ")" << endl;
+    cout << "Type: " << firstType().name();
+    if (hasSecondType())
+    {
+        cout << " and " << secondType().name();
+    }
+    cout << endl;
+    cout << "LP: " << baseStat(0) << " Speed: " << baseStat(5) << endl;
+    cout << "ATK: " << baseStat(1) << " DEF: " << baseStat(2) << endl;
+    cout << "ATK: " << baseStat(3) << " DEF: " << baseStat(4) << endl;
+    cout << genderBalance() << "% chances of being female" << endl;
 }
 
 float Specie::genderBalance()
@@ -91,20 +129,22 @@ void Specie::specieID(int id)
     if(id >= 0)
         m_specieID = id;
     else
-        throw exception();
+        throw invalid_argument("SpecieID is invalid");
 }
 
 string Specie::specieName()
 {
     if(m_specieName.size() == 0)
-        throw exception();
+    {
+        throw invalid_argument("SpecieName is invalid");
+    }
     return m_specieName;
 }
 
 void Specie::specieName(string newName)
 {
     if(newName.size() == 0)
-        throw exception();
+        throw invalid_argument("newName is invalid");
     m_specieName = newName;
 }
 
@@ -117,7 +157,7 @@ void Specie::variant(int id)
     if(id >= 0)
         m_variant = id;
     else
-        throw exception();
+        throw invalid_argument("variantID must be positive");
 }
 
 string Specie::variantName()
@@ -152,7 +192,7 @@ int Specie::baseStat(int index)
 {
     // make sure index and value are within proper borders and range
     if((index < 0) || (index > 5))
-        throw exception();
+        throw invalid_argument("Index is OoB");
     if(m_baseStats[index] < 1)
             m_baseStats[index] = 1;
     else if(m_baseStats[index] > 255)
@@ -164,7 +204,7 @@ void Specie::baseStat(int index, int ammount)
 {
     // make sure index and value are within proper borders
     if((index < 0) || (index > 5))
-        throw exception();
+        throw invalid_argument("Index is OoB");
     if(ammount < 1)
         ammount = 1;
     else if(ammount > 255)
@@ -232,75 +272,114 @@ void Specie::baseSpeed(int ammount)
     baseStat(5, ammount);
 }
 
-Type* Specie::type(int index)
+Type Specie::type(int index)
 {
-    if(!isTypeNumberValid(int(m_type[index]->value())))
+    if(!Type::isNumberValid(m_type[index].value()))
     {
-        throw exception();
+        string what = "given index is OoB, must be 0 or 1";
+        what += m_type[index].value();
+        throw invalid_argument(what);
     }
     return m_type[index];
 }
 
-Type* Specie::firstType()
+Type Specie::firstType()
 {
     return type(0);
 }
 
-Type* Specie::secondType()
+Type Specie::secondType()
 {
     return type(1);
 }
 
-array<Type*, 2> Specie::types()
+array<Type, 2> Specie::types()
 {
-    array<Type*, 2> retval;
-    retval[0] = firstType();
-    retval[1] = secondType();
-    return retval;
+    return m_type;
 }
 
-void Specie::type(int index, Type* p_type)
+void Specie::type(int index, Type p_type)
 {
     // make sure index and value are within proper borders
     if((index < 0) || (index > 1))
-        throw exception();
-    if(!isTypeNumberValid(int(p_type->value())))
-        throw exception();
+        throw invalid_argument("Out of bounds in Specie.type(index, p_type)");
+    if(!Type::isNumberValid(p_type.value()))
+        throw invalid_argument("invalide type number given in Specie.type(index, p_type)");
     m_type[index] = p_type;
 }
 
-void Specie::firstType(Type* p_type)
+void Specie::firstType(Type p_type)
 {
     type(0, p_type);
 }
 
-void Specie::secondType(Type* p_type)
+void Specie::secondType(Type p_type)
 {
     type(1, p_type);
 }
 
-void Specie::types(array<Type*, 2> tab)
+void Specie::types(array<Type, 2> tab)
 {
-    if((isTypeNumberValid(int(tab[0]->value())))
-    && (isTypeNumberValid(int(tab[1]->value()))))
+    if((Type::isNumberValid(tab[0].value()))
+    && (Type::isNumberValid(tab[1].value())))
         m_type.swap(tab);  
     else
-        throw exception();
+        throw invalid_argument("At least one given type is invalid in Specie.types()");
 }
 
-bool Specie::isOfType(Type* p_type)
+bool Specie::isOfType(Type p_type)
 {
-    return ((firstType()->value() == p_type->value()) 
-        || (secondType()->value() == p_type->value()));
+    return ((firstType().value() == p_type.value()) 
+        || (secondType().value() == p_type.value()));
 }
 
 bool Specie::hasSecondType()
 {
-    if (secondType()->value() == Type_t::None)
+    if (secondType().value() == 0)
     {
         return false;
     }
     return true;
+}
+
+void Specie::type(int index, int typeNo)
+{
+    // make sure index and value are within proper borders
+    if((index < 0) || (index > 1))
+        throw invalid_argument("Out of bounds in Specie.type(index, p_type) with int");
+    if(!Type::isNumberValid(typeNo))
+        throw invalid_argument("At least one givent type is invalid in Specie.type(index, p_type) with int");
+    m_type[index] = TypeFactory::createType(typeNo);
+}
+
+void Specie::firstType(int typeNo)
+{
+    type(0, typeNo);
+}
+
+void Specie::secondType(int typeNo)
+{
+    type(1, typeNo);
+}
+
+void Specie::types(array<int, 2> tab)
+{
+    if((Type::isNumberValid(tab[0]))
+    && (Type::isNumberValid(tab[1])))
+    {
+        array<Type, 2> newTab;
+        newTab[0] = TypeFactory::createType(tab[0]);
+        newTab[1] = TypeFactory::createType(tab[1]);
+        m_type.swap(newTab);  
+    }
+    else
+        throw invalid_argument("in Specie.types() with int");
+}
+
+bool Specie::isOfType(int typeNo)
+{
+    return ((firstType().value() == typeNo) 
+        || (secondType().value() == typeNo));
 }
 
 int Specie::catchRate()
@@ -311,6 +390,36 @@ int Specie::catchRate()
 void Specie::catchRate(int rate)
 {
     m_catchRate = rate;
+}
+
+int Specie::baseExp()
+{
+    return m_baseExp;
+}
+
+void Specie::baseExp(int val)
+{
+    m_baseExp = val;
+}
+
+int Specie::expAt100()
+{
+    return m_expAt100;
+}
+
+void Specie::expAt100(int val)
+{
+    m_expAt100 = val;
+}
+
+vector<pair<int, int>> Specie::EVGiven()
+{
+    return m_EVGiven;
+}
+
+void Specie::EVGiven(vector<pair<int, int>>  value)
+{
+    m_EVGiven = value;
 }
 
 
