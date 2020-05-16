@@ -11,13 +11,17 @@ class PersonalityValue
 {
 
 private:
-    array<bool, 32> m_value;
+    unsigned int m_value;
 public:
     PersonalityValue();
+    PersonalityValue(unsigned int ipv);
     ~PersonalityValue();
+    static unsigned int generate();
     unsigned int valueInt();
     unsigned int valueForGender();
-    array<bool, 32> value();
+    unsigned int valueForGenderInt();
+    array<bool, 8> valueForGenderBool();
+    array<bool, 32> valueBool();
     unsigned int valueForShiny1();
     unsigned int valueForShiny2();
     
