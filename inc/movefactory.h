@@ -7,18 +7,11 @@
 
 #include "factories.h"
 
-class MoveFactory
-{
-
-private:
-
-public:
-    MoveFactory();
-    ~MoveFactory();
-    
-    static Move createMove(int moveID);
-    static KnownMove createKnownMove(int moveID, int current = 0, int max = 0);
-};
+namespace MoveFactory
+{    
+    Move createMove(int moveID);
+    KnownMove createKnownMove(int moveID, int current = 0, int max = 0);
+}
 
 
 #endif

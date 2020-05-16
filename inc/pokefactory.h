@@ -9,22 +9,15 @@
 
 #include "factories.h"
 
-class PokeFactory
+namespace PokeFactory
 {
 
-private:
-
-public:
-    PokeFactory();
-    ~PokeFactory();
-
-    static Specie createSpecie(int id, int variantID = 0);
-    static SavagePokemon createSavagePokemon(int id, int level, int variantID = 0);
-    static SavagePokemon createUniqueSavagePokemon(string fileName);
-    static TrainerPokemon createTrainerPokemon(string identifier);
-    static void saveTrainerPokemon(TrainerPokemon *pkmn);
-
-};
+    Specie createSpecie(int id, int variantID = 0);
+    SavagePokemon createSavagePokemon(int id, int level, int variantID = 0);
+    SavagePokemon createUniqueSavagePokemon(string fileName);
+    TrainerPokemon createTrainerPokemon(string identifier);
+    void saveTrainerPokemon(TrainerPokemon *pkmn);
+}
 
 
 #endif

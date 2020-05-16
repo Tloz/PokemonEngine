@@ -9,14 +9,11 @@
 #include "factories.h"
 
 
-class TrainerFactory
+namespace TrainerFactory
 {
-public:
-    TrainerFactory();
-    ~TrainerFactory();
-    static Trainer loadPlayer();
-    static Trainer readTrainer(string identifier);    
-};
+    Trainer loadPlayer();
+    Trainer readTrainer(string identifier);    
+}
 
 
 #endif

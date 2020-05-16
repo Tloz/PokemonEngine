@@ -14,18 +14,13 @@
 #define BALL_FILE_NAME_PAD_UNIT 3
 
 
-class BallFactory
+namespace BallFactory
 {
-public:
-    BallFactory();
-    ~BallFactory();
-
-    static Ball createBall(int ballType = 1);
-    static Ball createPokeball();
-    static Ball createSuperball();
-    static Ball createHyperball();
-    static Ball createMasterball();
-    
-};
+    Ball createBall(int ballType = 1);
+    Ball createPokeball();
+    Ball createSuperball();
+    Ball createHyperball();
+    Ball createMasterball();   
+}
 
 #endif
