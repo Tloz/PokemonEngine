@@ -4,7 +4,6 @@
 #include <array>
 #include <vector>
 #include "type.h"
-#include "pkmnexceptions.h"
 
 enum Cat
 {

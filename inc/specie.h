@@ -3,7 +3,6 @@
 #include <string>
 #include <array>
 #include <vector>
-#include "pkmnexceptions.h"
 #include "type.h"
 #include "typefactory.h"
 #include "evolution.h"
